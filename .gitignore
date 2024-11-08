@@ -2,8 +2,11 @@
 __pycache__
 
 results/*
+!results/README.md
 models/*
+!models/README.md
 log/*
+!log/README.md
 *.csv
 *.pdf
 *.png
