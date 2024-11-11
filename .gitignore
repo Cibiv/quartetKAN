@@ -7,6 +7,7 @@ models/*
 !models/README.md
 log/*
 !log/README.md
+config/*
 *.csv
 *.pdf
 *.png
