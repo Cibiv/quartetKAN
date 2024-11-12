@@ -32,8 +32,7 @@ class MLP:
                         self.learning_rate = data['learning_rate']
                         self.batch_size = data['batch_size']
                         self.epochs = data['epochs']
-                        self.display_step_ep = data['display_step_ep']
-                        self.display_step_it = data['display_step_it']
+                        self.no_epochs_dataset = data['no_epochs_dataset']
                         self.perc_eval = data['perc_eval']
                         self.multiple_data = data['multiple_data']
                         self.data_file = data['data_file']
@@ -42,7 +41,6 @@ class MLP:
                             else None
                         self.output_file = f"../log/{data['save_network_to']}_{timestamp}.log" if 'save_network_to' in data \
                             else None
-                        self.test_only = data['test_only']
                         self.weight_initializer = data['weight_initializer'] if 'weight_initializer' in data \
                             else 'xavier'
                         self.transfer_function = data['transfer_function'] if 'transfer_function' in data else 'relu'
@@ -243,7 +241,7 @@ class MLP:
         early_stopping = EarlyStopping(monitor = 'val_loss', patience = 10, verbose = 1)
         plot_curves = TrainingPlot(self.save_network_to, self.logger)
 
-        steps_epoch = int(self.data_length*(1-self.perc_eval)/self.batch_size/self.display_step_ep)
+        steps_epoch = int(self.data_length*(1-self.perc_eval)/self.batch_size/self.no_epochs_dataset)
         val_steps_epoch = int(self.data_length*(self.perc_eval)/self.batch_size)
 
         self.model.fit(train_it, 

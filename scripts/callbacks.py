@@ -7,8 +7,7 @@ class TrainingPlot(keras.callbacks.Callback):
 
     def __init__(self, save_network_to, logger, **kwargs):
         super(TrainingPlot, self).__init__()
-        self.output = save_network_to[:save_network_to.rfind('/')+1].replace('models','results')
-        self.checkpoint = save_network_to[save_network_to.rfind('/')+1:]
+        self.output = save_network_to.replace('models','results')
         self.epochs = []
         self.losses = []
         self.acc = []
@@ -20,9 +19,9 @@ class TrainingPlot(keras.callbacks.Callback):
     # This function is called at the end of each epoch
     def on_epoch_end(self, epoch, logs={}):
 
-        self.logger.info(f'Epoch {epoch}: loss: {logs.get("loss"):.4g} - acc: {logs.get("binary_accuracy"):.4f} - val loss: {logs.get("val_loss"):.4g} - val acc: {logs.get("val_binary_accuracy"):.4f} - lr: {float(K.get_value(self.model.optimizer.lr)):.2g}')
-
         epoch+=1
+
+        self.logger.info(f'Epoch {epoch}: loss: {logs.get("loss"):.4g} - acc: {logs.get("binary_accuracy"):.4f} - val loss: {logs.get("val_loss"):.4g} - val acc: {logs.get("val_binary_accuracy"):.4f} - lr: {float(K.get_value(self.model.optimizer.lr)):.2g}')
 
         # Append the logs, losses and accuracies to the lists
         self.losses.append(logs.get('loss'))
@@ -48,7 +47,7 @@ class TrainingPlot(keras.callbacks.Callback):
         plt.legend()
         # Make sure there exists a folder called output in the current directory
         # or replace 'output' with whatever direcory you want to put in the plots
-        name = f'{self.output}loss_{self.checkpoint}.png'
+        name = f'{self.output}_loss.png'
         plt.savefig(name)
         plt.close()
 
@@ -61,7 +60,7 @@ class TrainingPlot(keras.callbacks.Callback):
         plt.legend()
         # Make sure there exists a folder called output in the current directory
         # or replace 'output' with whatever direcory you want to put in the plots
-        name = f'{self.output}acc_{self.checkpoint}.png'
+        name = f'{self.output}_acc.png'
         plt.savefig(name)
         plt.close()
 
@@ -72,6 +71,6 @@ class TrainingPlot(keras.callbacks.Callback):
         plt.ylabel("Learning Rate")
         # Make sure there exists a folder called output in the current directory
         # or replace 'output' with whatever direcory you want to put in the plots
-        name = f'{self.output}lr_{self.checkpoint}.png'
+        name = f'{self.output}_lr.png'
         plt.savefig(name)
         plt.close()

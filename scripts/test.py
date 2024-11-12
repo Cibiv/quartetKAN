@@ -33,8 +33,9 @@ args = vars(parser.parse_args())
 
 def test(model):
 
-    output = args['model'][:args['model'].rfind('/')+1].replace('models','results')
-    checkpoint = args['model'][args['model'].rfind('/')+1:]
+    output = args['model'].replace('models','results')
+    if output.endswith('/'):
+        output = output[:-1]
 
     tmp_accuracies = {'pProb': [], 'qProb': [], 'zone': [], 'accuracy': []}
 
@@ -73,7 +74,7 @@ def test(model):
     df_output['Prob']='p'+df_output['pProb'].apply(lambda x: round(x, 3)).astype(str)+'_q'+df_output['qProb'].apply(lambda x: round(x, 3)).astype(str)
     df_output=df_output[['Prob','Far','Fel']]
 
-    name = output+'test_'+ checkpoint + '_seqLen_'+ args["seqlen"] +'.csv'
+    name = f'{output}_test_seqLen_{args["seqlen"]}.csv'
     df_output['Far'] = df_output['Far']*100
     df_output['Fel'] = df_output['Fel']*100
     df_output.to_csv(name, index=False)
@@ -84,7 +85,7 @@ def test(model):
     far_nn = getPivot(far_nn)
     fel_nn = getPivot(fel_nn)
 
-    make_figure(far_nn, fel_nn, f'{output}heatmap_permuted_dataset_{checkpoint}_seqLen_{args["seqlen"]}.png')
+    make_figure(far_nn, fel_nn, f'{output}_heatmap_permuted_dataset_seqLen_{args["seqlen"]}.png')
 
 
 def testToAccuracy(df):

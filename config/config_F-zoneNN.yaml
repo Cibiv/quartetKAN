@@ -2,15 +2,12 @@ layers: [15, 64, 128, 256, 512, 1024, 408, 208, 96, 1]
 learning_rate: 0.0001
 batch_size: 32
 epochs: 20
-display_step_it: 0
-display_step_ep: 10
-perc_eval: 0.01
+no_epochs_dataset: 10
+perc_eval: 0.1
 multiple_data: False
 data_file: "../data/processed/zone/train/train_zone_permuted_shuffled.csv"
-test_files: "../data/processed/zone/test/1000bp/*.csv"
 data_length: 270000000
 save_network_to: "F-zoneNN"
-test_only: False
 weight_initializer: xavier
 transfer_function: relu
 activation_function: sigmoid
