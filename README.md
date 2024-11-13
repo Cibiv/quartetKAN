@@ -4,7 +4,7 @@
 
 For all scripts Python x.x was used. The python packages used can be installed via
 ```sh
-pip install (--user) -r packages_required.txt
+conda env create -f required_packages.yml
 ```
 if python3 and pip are already installed.
 
