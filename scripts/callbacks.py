@@ -7,7 +7,7 @@ class TrainingPlot(keras.callbacks.Callback):
 
     def __init__(self, save_network_to, logger, **kwargs):
         super(TrainingPlot, self).__init__()
-        self.output = save_network_to.replace('models','results')
+        self.output = save_network_to.replace('models', 'results')
         self.epochs = []
         self.losses = []
         self.acc = []
@@ -16,11 +16,12 @@ class TrainingPlot(keras.callbacks.Callback):
         self.lr = []
         self.logger = logger
 
+
     # This function is called at the end of each epoch
     def on_epoch_end(self, epoch, logs={}):
 
-        epoch+=1
-
+        # increase epoch count and log current loss, accuracy and lr
+        epoch += 1
         self.logger.info(f'Epoch {epoch}: loss: {logs.get("loss"):.4g} - acc: {logs.get("binary_accuracy"):.4f} - val loss: {logs.get("val_loss"):.4g} - val acc: {logs.get("val_binary_accuracy"):.4f} - lr: {float(K.get_value(self.model.optimizer.lr)):.2g}')
 
         # Append the logs, losses and accuracies to the lists
@@ -32,12 +33,8 @@ class TrainingPlot(keras.callbacks.Callback):
 
         # Before plotting ensure at least 2 epochs have passed
         self.epochs.append(epoch)
-
-        # You can chose the style of your preference
-        # print(plt.style.available) to see the available options
-        #plt.style.use("seaborn")
-
-        # Plot train loss, train acc, val loss and val acc against epochs passed
+        
+        # Plot train loss and val loss against epochs passed
         plt.figure()
         plt.plot(self.epochs, self.losses, label = "training loss")
         plt.plot(self.epochs, self.val_losses, label = "validation loss")
@@ -45,12 +42,13 @@ class TrainingPlot(keras.callbacks.Callback):
         plt.xlabel("Epoch #")
         plt.ylabel("Loss")
         plt.legend()
-        # Make sure there exists a folder called output in the current directory
-        # or replace 'output' with whatever direcory you want to put in the plots
+
+        # save plot
         name = f'{self.output}_loss.png'
         plt.savefig(name)
         plt.close()
 
+        # Plot train accuracy and val accuracy against epochs passed
         plt.figure()
         plt.plot(self.epochs, self.acc, label = "training accuracy")
         plt.plot(self.epochs, self.val_acc, label = "validation accuracy")
@@ -58,19 +56,20 @@ class TrainingPlot(keras.callbacks.Callback):
         plt.xlabel("Epoch #")
         plt.ylabel("Accuracy")
         plt.legend()
-        # Make sure there exists a folder called output in the current directory
-        # or replace 'output' with whatever direcory you want to put in the plots
+
+        # save plot
         name = f'{self.output}_acc.png'
         plt.savefig(name)
         plt.close()
 
+        # Plot learning rate against epochs passed
         plt.figure()
         plt.plot(self.epochs, self.lr)
         plt.title("Learning Rates")
         plt.xlabel("Epoch #")
         plt.ylabel("Learning Rate")
-        # Make sure there exists a folder called output in the current directory
-        # or replace 'output' with whatever direcory you want to put in the plots
+        
+        # save plot
         name = f'{self.output}_lr.png'
         plt.savefig(name)
         plt.close()
