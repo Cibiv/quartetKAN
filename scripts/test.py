@@ -47,7 +47,7 @@ def test(model):
     for file in os.listdir(args["test"]):
         if not file.endswith('.csv'):
             continue 
-        print(file, flush = True)
+        logging.info(file, flush = True)
 
         # read file and split Farris and Felsenstein alignments
         df = pd.read_csv(f'{args["test"]}/{file}', usecols = [i for i in range(args['offset'], args['offset'] + 1 + args['no_feat'])])
@@ -86,6 +86,10 @@ def test(model):
     df_output = df_output.rename(index = str, columns = {"accuracy_x": "Far", "accuracy_y": "Fel"})
     df_output['Prob'] = 'p' + df_output['pProb'].apply(lambda x: round(x, 3)).astype(str) + '_q' + df_output['qProb'].apply(lambda x: round(x, 3)).astype(str)
     df_output = df_output[['Prob', 'Far', 'Fel']]
+
+    logging.info(f'Acc. on Far: {df_output["Far"]}')
+    logging.info(f'Acc. on Fel: {df_output["Fel"]}')
+    logging.info(f'Acc. on avg: {(df_output["Far"]+df_output["Fel"])/2}')
 
     # save accuracy table to file
     name = f'{output}_test_seqLen_{args["seqlen"]}.csv'
