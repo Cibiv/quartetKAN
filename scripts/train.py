@@ -285,7 +285,7 @@ class MLP:
         self.model.compile(loss = self.loss, optimizer = optm, metrics = [bin_acc])
 
         # define that always the latest best model is saved on specified path according to validation accuracy
-        model_checkpoint = ModelCheckpoint(filepath = f'{self.save_network_to}_{epoch:03d}-{binary_accuracy:.3f}-{val_binary_accuracy:.3f}', 
+        model_checkpoint = ModelCheckpoint(filepath = self.save_network_to + '_{epoch:03d}-{binary_accuracy:.3f}-{val_binary_accuracy:.3f}', 
                                            monitor = 'val_binary_accuracy', 
                                            mode = 'max', 
                                            save_best_only = False, 
