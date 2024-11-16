@@ -14,7 +14,7 @@ from callbacks import TrainingPlot
 
 """
 Wie in train.py wird als erstes Argument ein
- yaml config file übergeben 
+ yaml config file uebergeben 
  (das Beispielfile hab ich in config gestellt). 
  train kann als zweites argument gegeben werden 
 um das trainieren direkt zu starten
