@@ -49,7 +49,8 @@ class KANModel:
                                 else 'xavier'
                         self.transfer_function = data['transfer_function'] if 'transfer_function' in data else 'relu'
                         self.activation_function = data['activation_function'] if 'activation_function' in data \
-                                else 'sigmoid'self.cost_function = data.get('cost_function', 'binary_crossentropy') 
+                                else 'sigmoid'
+                        self.cost_function = data.get('cost_function', 'binary_crossentropy') 
                         self.optimizer_type =  self.opt = data['optimizer'] if 'optimizer' in data else 'adam'
                         self.offset = data['offset']  
                         self.shuf_buffer = data['shuf_buffer'] if 'shuf_buffer' in data else 1000
