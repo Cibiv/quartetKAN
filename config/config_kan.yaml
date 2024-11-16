@@ -1,0 +1,22 @@
+layers: [128, 64, 32, 1]             # Layer-Architektur: Eingabedimensionen und versteckte Schichten !Unterschied!
+learning_rate: 0.0001                # Lernrate für den Optimizer
+batch_size: 32                       # Größe der Batches
+epochs: 20                           #Anzahl der epochs (gesamt 20, eine dauert ca 10h auf dem Server)
+no_epochs_dataset: 10                # Anzahl der Wiederholungen des gesamten Datensatzes pro Epoche
+perc_eval: 0.1                       # Anteil der Daten, die zur Validierung verwendet werden? Also 10%?
+#multiple_data: False # Was ist das? !Unterschied!
+data_file: "../data/processed/zone/train/train_zone_permuted_shuffled.csv"  #Pfad zur Datei mit den Trainingsdaten
+data_length: 270000000               # Gesamtanzahl der Datenzeilen in der CSV-Datei
+save_network_to: "kan_model"         # Pfad für das Speichern des trainierten Modells !Unterschied!
+weight_initializer: xavier           # Initialisierer für die Gewichtung
+transfer_function: relu              # Aktivierungsfunktion für versteckte Schichten
+activation_function: sigmoid         # Aktivierungsfunktion für die Ausgabeschicht
+cost_function: sigmoid cross-entropy # Kostenfunktion
+optimizer: adam
+dropout: 0.0                         # Dropout-Rate zur Vermeidung von Overfitting
+offset: 4                            # Offset für die Eingabedaten
+seed_init: 1 # use fix seeds to reproduce the network exactly else remove seeds
+seed_shuffle: 1 #Seed zum shuffeln der daten?
+log_level: info # can be debug, error, fatal, info or warn
+#kein shuf_buffer (aber in Alinas auch nicht, also automatisch 1000
+#kein beta 1 und beta 2 oder use_bias
