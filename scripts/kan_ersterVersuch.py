@@ -7,9 +7,10 @@ import yaml
 import sys
 from datetime import datetime
 
-#tfkan muss im conda env installiert sein 
-from tfkan.models import KAN  #importieren von KAN model aus tfkan
-from tfkan.layers import GraphAttention, GraphConvolution  #layers aus tfkan
+#tfkan muss im conda env installiert sein
+#importieren genau wie im github beschrieben
+from tfkan import layers
+from tfkan.layers import DenseKAN, Conv2DKAN
 from callbacks import TrainingPlot  
 
 """
