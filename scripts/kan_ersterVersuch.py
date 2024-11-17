@@ -127,23 +127,42 @@ class KANModel:
             exit(2)
 
     def build_kan_model(self):
+        """
+        KAN Modell bauen
+        """
         self.model = keras.Sequential()
+
         for layer_config in self.layers:
             layer_type = layer_config['type']
             units = layer_config.get('units', 32)
-            activation = self.get_activation()
+            activation = layer_config.get('activation', self.transfer_function)
 
             if layer_type == 'dense':
-                self.model.add(DenseKAN(units=units, activation=activation, kernel_initializer=self.weight_initializer, use_bias=self.use_bias))
+                self.model.add(DenseKAN(
+                    units=units,
+                    activation=activation,
+                    kernel_initializer=self.weight_initializer,
+                    use_bias=self.use_bias
+                ))
+
             elif layer_type == 'conv2d':
                 filters = layer_config.get('filters', 32)
                 kernel_size = layer_config.get('kernel_size', (3, 3))
-                self.model.add(Conv2DKAN(filters=filters, kernel_size=kernel_size, activation=activation, kernel_initializer=self.weight_initializer, use_bias=self.use_bias))
+                self.model.add(Conv2DKAN(
+                    filters=filters,
+                    kernel_size=kernel_size,
+                    activation=activation,
+                    kernel_initializer=self.weight_initializer,
+                    use_bias=self.use_bias
+                ))
+
+            #optionales Dropout hinzufügen (brauche ich das?)
             if self.dropout > 0:
                 self.model.add(keras.layers.Dropout(self.dropout))
-        
-        self.model.add(DenseKAN(units=1, activation='sigmoid'))
-        self.logger.info("KAN model architecture built")
+
+        #ausgabeschicht
+        self.model.add(DenseKAN(units=1, activation=self.activation_function))
+        self.logger.info("KAN model architecture built with parameters from config file")
 
     def compile_model(self):
         if self.optimizer_type == "adam":
