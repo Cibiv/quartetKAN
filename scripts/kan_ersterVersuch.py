@@ -63,7 +63,9 @@ class KANModel:
         self.logger = self.get_logger()
         self.logger.info("KAN initialized with parameters: " + str(data))
         #anzahl der eingabefeatures 
-        self.in_size = 19 #ich rate mal. Wieviele features gibt es im Datensatz?
+        #self.in_size = 19 #ich rate mal. Wieviele features gibt es im Datensatz?
+        self.in_size = 15 #ich hab es mir in der parse row func ausgeben lassen und es kam 15 raus 
+
 
     def datetime_stamp(self):
         t = datetime.now().strftime('%Y%m%d_%H%M%S')
@@ -98,7 +100,8 @@ class KANModel:
         zeros = tf.zeros(shape=(1,), dtype=tf.float32)
         ones = tf.ones(shape=(1,), dtype=tf.float32)
         #num_features = 20 
-        num_features = 19
+        #num_features = 19
+        num_features = 15 #ich habs beim Debuggen ausgeben lassen
         return [zeros] * num_features + [ones]
 
 
