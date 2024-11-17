@@ -1,19 +1,25 @@
 # import libraries
 import tensorflow as tf
 import tensorflow.keras as keras
-import tfkan
 from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint, ReduceLROnPlateau
+from tensorflow.keras.layers import Dense, Input, Dropout
 from tensorflow.keras.optimizers import Adam
-from tfkan import GCN
+
+from tfkan import layers
+from tfkan.layers import DenseKAN, Conv2DKAN
+
 import logging
 import yaml
 import sys
 from datetime import datetime
 
-
 from callbacks import TrainingPlot
 
 
+"""
+Neural network implementation (architecture: multi-layer perceptron) used for classification (distinguishing between Farris- and Felsenstein-type trees).
+It expects the path to a YAML config file as first argument (such as the ones specified in ./config). As second optional argument, the keyword 'train' can be given to start the training directly.
+"""
 class MLP:
     # initializes the multi-layer perceptron with the parameters as specified in the config file
     def __init__(self, path):
@@ -141,14 +147,12 @@ class MLP:
         features = data[self.offset:-1]
         features = tf.stack(features, axis = -1)
 
-       # adjacency_matrix = self.create_adjacency_matrix(features)
-
         # class label is in the last column
         label = data[-1]
         features = tf.squeeze(features, axis = 0)
         label = tf.squeeze(label, axis = 0)
-        #return features, label, adjacency_matrix
         return features, label
+
 
     # defines input pipeline for train data and returns dataset containing labelled features
     def create_dataset(self):
@@ -225,16 +229,26 @@ class MLP:
         # use activation, transfer function
         activation = self.get_activation()
         transfer = self.get_transfer()
+        
+        # build sequential architecture
+        #########################
+        #self.model = keras.Sequential()
+        self.model = tf.keras.models.Sequential([
+                    DenseKAN(4),
+                    DenseKAN(1)
+                ])
+        #########################
+        # set input layer with as many nodes as first value in layer list (should be = #features)
+        self.model.add(Input(shape = (self.layers[0],)))
 
-        # Define Graph Neural Network architecture using tfkan
-        self.model = GCN(layers=self.layers,
-                 activation=transfer,
-                 dropout=self.dropout,
-                 weight_initializer=w_init,
-                 bias_initializer=b_init,
-                 input_dim=self.layers[0],
-                 output_dim=self.layers[-1],
-                 activation_function=activation)
+        # add interim layers with transfer function as activation and dropout
+        for l in range(1, len(self.layers) - 1):
+            self.model.add(Dense(self.layers[l], activation = transfer, use_bias = self.use_bias, kernel_initializer = w_init, bias_initializer = b_init))
+            self.model.add(Dropout(self.dropout))
+
+        # add output layer with activation
+        self.model.add(Dense(self.layers[-1], activation = activation, use_bias = self.use_bias, kernel_initializer = w_init, bias_initializer = b_init))
+    
 
     # initialize parameters
     def init_params(self):
