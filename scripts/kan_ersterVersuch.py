@@ -48,6 +48,8 @@ class KANModel:
                         self.beta2 = data.get('beta2', 0.999)
                         self.use_bias = data.get('use_bias', True)
                         
+                        self.determine_input_size()
+
                         self.log_level = data.get('log_level', 'info')
                         tf.compat.v1.logging.set_verbosity({'debug': 10, 'error': 40, 'fatal': 50, 'info': 20, 'warn': 30}.get(data['log_level'], 20))
                         #initialisiere die Eingabegröße dynamisch
@@ -156,6 +158,21 @@ class KANModel:
         #    self.logger.error(f"Error determining input size: {e}")
          #   exit(1)
       
+    def determine_input_size(self):
+        #lese die erste Zeile der CSV-Datei (nach der Kopfzeile), um die Anzahl der Spalten zu bestimmen
+        with open(self.data_file, 'r') as file:
+            #überspringe die Kopfzeile
+            header = file.readline()
+            #lese die nächste Zeile mit Daten
+            line = file.readline().strip()
+        
+        #die Anzahl der Spalten in der Zeile minus 1 (für das Label)
+        num_columns = len(line.split(','))
+        
+        # `self.offset` bestimmt, wie viele Spalten ignoriert werden sollen
+        self.in_size = num_columns - self.offset - 1  # Minus 1 für die Label-Spalte
+        print(f"Bestimmte Eingabegröße (in_size): {self.in_size}")
+
 
     #dynamische get records function:
     def get_record_defaults(self):
