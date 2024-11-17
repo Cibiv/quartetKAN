@@ -50,7 +50,7 @@ class KANModel:
                         
                         #self.determine_input_size()
 
-                        self.in_size = 20
+                        self.in_size = 19
 
                         self.log_level = data.get('log_level', 'info')
                         tf.compat.v1.logging.set_verbosity({'debug': 10, 'error': 40, 'fatal': 50, 'info': 20, 'warn': 30}.get(data['log_level'], 20))
