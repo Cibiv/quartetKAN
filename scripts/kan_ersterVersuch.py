@@ -80,16 +80,10 @@ class KANModel:
         return logger
     
     def get_record_defaults(self):
-        # Zugriff auf die Anzahl der Units in der ersten Schicht (nicht das Dictionary)
-        num_input_units = self.layers[0]['units']
+        zeros = tf.zeros(shape = (1,), dtype = tf.float32)
+        ones = tf.ones(shape = (1,), dtype = tf.float32)
+        return [zeros] * (self.layers[0] + self.offset) + [ones]
     
-        # Erstellen von Tensoren für Nullen und Einsen
-        zeros = tf.zeros([num_input_units], dtype=tf.float32)  # Tensor mit Nullen
-        ones = tf.ones([1], dtype=tf.float32)  # Tensor mit Einsen
-    
-        # Rückgabe der Defaults mit Nullen und Einsen
-        return [zeros] * (num_input_units + self.offset) + [ones]
-
     def parse_row(self, tf_string):
         data = tf.io.decode_csv(tf.expand_dims(tf_string, axis=0), self.get_record_defaults())
         features = data[self.offset:-1]
