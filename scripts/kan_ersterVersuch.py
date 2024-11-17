@@ -63,8 +63,8 @@ class KANModel:
         self.logger = self.get_logger()
         self.logger.info("KAN initialized with parameters: " + str(data))
         #anzahl der eingabefeatures 
-        #self.in_size = 19 #ich rate mal. Wieviele features gibt es im Datensatz?
-        self.in_size = 15 #ich hab es mir in der parse row func ausgeben lassen und es kam 15 raus 
+        self.in_size = 19 #ich rate mal. Wieviele features gibt es im Datensatz?
+        #self.in_size = 15 #ich hab es mir in der parse row func ausgeben lassen und es kam 15 raus 
 
 
     def datetime_stamp(self):
