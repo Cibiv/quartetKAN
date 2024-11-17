@@ -205,6 +205,12 @@ class KANModel:
         self.build_kan_model()
         self.compile_model()
 
+        #überprüfung der Eingabegröße 
+        for features, label in train_it:
+            print(f"train self func: Training features shape: {features.shape}") 
+            print(f"train self func: Training label shape: {label.shape}")
+            break #nur der erste batch soll überprüft werden
+
         model_checkpoint = ModelCheckpoint(filepath=self.save_network_to + '_{epoch:03d}-{accuracy:.3f}-{val_accuracy:.3f}', monitor='val_accuracy', mode='max', save_best_only=False, verbose=1)
         reduce_lr = ReduceLROnPlateau(monitor='val_loss', factor=0.8, patience=5, verbose=1)
         early_stopping = EarlyStopping(monitor='val_loss', patience=10, verbose=1)
