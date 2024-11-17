@@ -78,14 +78,21 @@ class KANModel:
         logger.addHandler(sh)
         logger.setLevel(logging.INFO)
         return logger
+ 
+ #   def get_record_defaults(self):
+  #      zeros = tf.zeros(shape=(1,), dtype=tf.float32)
+   #     ones = tf.ones(shape=(1,), dtype=tf.float32)
+    #    first_layer_units = self.layers[0].get('units', 1)  # Anzahl der Einheiten der ersten Schicht
+     #   return [zeros] * (first_layer_units + self.offset) + [ones]
+
     
     def get_record_defaults(self):
         zeros = tf.zeros(shape=(1,), dtype=tf.float32)
         ones = tf.ones(shape=(1,), dtype=tf.float32)
-        first_layer_units = self.layers[0].get('units', 1)  # Anzahl der Einheiten der ersten Schicht
-        return [zeros] * (first_layer_units + self.offset) + [ones]
+        total_features = sum(layer.get('units', 1) for layer in self.layers if layer['type'] == 'dense')
+        return [zeros] * (total_features + self.offset) + [ones]
 
-    
+
     def parse_row(self, tf_string):
         data = tf.io.decode_csv(tf.expand_dims(tf_string, axis=0), self.get_record_defaults())
         features = data[self.offset:-1]
