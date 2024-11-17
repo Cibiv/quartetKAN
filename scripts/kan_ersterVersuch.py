@@ -114,21 +114,48 @@ class KANModel:
     #funktion zur bestimmung der Anzahl an features (dafür)
     #wird die erste zeile der csv datei genommen 
     #(dynamisch ist besser als die zahl exakt reinschreiben)
+    #def determine_input_size(self):
+     #   try:
+      #      with open(self.data_file, 'r') as file:
+       #         first_line = file.readline().strip()
+        #        #CSV-Zeile in eine Liste umwandeln
+         #       values = first_line.split(',')
+          #      #berechne die Anzahl der Features (ohne das Label)
+           #     self.in_size = len(values) - 1 - self.offset  # -1 für das Label, -offset für den Versatz
+            #print(f"Dynamically determined input size: {self.in_size}")
+       # except FileNotFoundError:
+        #    self.logger.error(f"Data file {self.data_file} not found.")
+         #   exit(1)
+        #except Exception as e:
+         #   self.logger.error(f"Error determining input size: {e}")
+          #  exit(1)
+
     def determine_input_size(self):
+        """Bestimmt die Anzahl der Features basierend auf der 5. Zeile der CSV-Datei."""
         try:
             with open(self.data_file, 'r') as file:
-                first_line = file.readline().strip()
-                #CSV-Zeile in eine Liste umwandeln
-                values = first_line.split(',')
-                #berechne die Anzahl der Features (ohne das Label)
-                self.in_size = len(values) - 1 - self.offset  # -1 für das Label, -offset für den Versatz
-            print(f"Dynamically determined input size: {self.in_size}")
+                #überspringe die ersten vier Zeilen
+                for _ in range(4):
+                    file.readline()
+                
+                #fünfte zeile einlesen
+                fifth_line = file.readline().strip()
+                print(f"Fifth line of CSV: {fifth_line}")  #debugging: 5. Zeile anzeigen lassen
+                
+                #splitte die Zeile anhand des Kommas (CSV-Separator)
+                values = fifth_line.split(',')
+                print(f"Number of columns in fifth line: {len(values)}")  #debugging: Anzahl der Spalten in fünfter zeile
+                
+                #berechne die Anzahl der Features (ohne das Label in der letzten spalte)
+                self.in_size = len(values) - 1 - self.offset
+                print(f"Determined input size (features): {self.in_size}")
         except FileNotFoundError:
             self.logger.error(f"Data file {self.data_file} not found.")
             exit(1)
         except Exception as e:
             self.logger.error(f"Error determining input size: {e}")
             exit(1)
+      
 
     #dynamische get records function:
     def get_record_defaults(self):
