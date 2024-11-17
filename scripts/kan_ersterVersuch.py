@@ -95,7 +95,8 @@ class KANModel:
     def get_record_defaults(self):
         zeros = tf.zeros(shape=(1,), dtype=tf.float32)
         ones = tf.ones(shape=(1,), dtype=tf.float32)
-        num_features = 20 
+        #num_features = 20 
+        num_features = 19
         return [zeros] * num_features + [ones]
 
 
