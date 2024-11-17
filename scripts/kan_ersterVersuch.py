@@ -51,8 +51,8 @@ class KANModel:
                         self.log_level = data.get('log_level', 'info')
                         tf.compat.v1.logging.set_verbosity({'debug': 10, 'error': 40, 'fatal': 50, 'info': 20, 'warn': 30}.get(data['log_level'], 20))
                         #initialisiere die Eingabegröße dynamisch
-                        self.in_size = None
-                        self.determine_input_size()  #dynamische Bestimmung der Eingabegröße
+                        #self.in_size = None
+                        #self.determine_input_size()  #dynamische Bestimmung der Eingabegröße
 
                         
                         self.logger = self.get_logger()
@@ -130,43 +130,44 @@ class KANModel:
          #   self.logger.error(f"Error determining input size: {e}")
           #  exit(1)
 
-    def determine_input_size(self):
-        """Bestimmt die Anzahl der Features basierend auf der 5. Zeile der CSV-Datei."""
-        try:
-            with open(self.data_file, 'r') as file:
-                #überspringe die ersten vier Zeilen
-                for _ in range(4):
-                    file.readline()
-                
-                #fünfte zeile einlesen
-                fifth_line = file.readline().strip()
-                print(f"Fifth line of CSV: {fifth_line}")  #debugging: 5. Zeile anzeigen lassen
-                
-                #splitte die Zeile anhand des Kommas (CSV-Separator)
-                values = fifth_line.split(',')
-                print(f"Number of columns in fifth line: {len(values)}")  #debugging: Anzahl der Spalten in fünfter zeile
-                
-                #berechne die Anzahl der Features (ohne das Label in der letzten spalte)
-                self.in_size = len(values) - 1 - self.offset
-                print(f"Determined input size (features): {self.in_size}")
-        except FileNotFoundError:
-            self.logger.error(f"Data file {self.data_file} not found.")
-            exit(1)
-        except Exception as e:
-            self.logger.error(f"Error determining input size: {e}")
-            exit(1)
+#    def determine_input_size(self):
+ #       """Bestimmt die Anzahl der Features basierend auf der 5. Zeile der CSV-Datei."""
+  #      try:
+   #         with open(self.data_file, 'r') as file:
+    #            #überspringe die ersten vier Zeilen
+     #           for _ in range(4):
+      #              file.readline()
+       #         
+        #        #fünfte zeile einlesen
+         #       fifth_line = file.readline().strip()
+          #      print(f"Fifth line of CSV: {fifth_line}")  #debugging: 5. Zeile anzeigen lassen
+           #     
+            #    #splitte die Zeile anhand des Kommas (CSV-Separator)
+             #   values = fifth_line.split(',')
+              #  print(f"Number of columns in fifth line: {len(values)}")  #debugging: Anzahl der Spalten in fünfter zeile
+#                
+ #               #berechne die Anzahl der Features (ohne das Label in der letzten spalte)
+  #              self.in_size = len(values) - 1 - self.offset
+   #             print(f"Determined input size (features): {self.in_size}")
+    #    except FileNotFoundError:
+     #       self.logger.error(f"Data file {self.data_file} not found.")
+      #      exit(1)
+       # except Exception as e:
+        #    self.logger.error(f"Error determining input size: {e}")
+         #   exit(1)
       
 
     #dynamische get records function:
     def get_record_defaults(self):
         zeros = tf.zeros(shape=(1,), dtype=tf.float32)
         ones = tf.ones(shape=(1,), dtype=tf.float32)
-        return [zeros] * self.in_size + [ones]
+        return [zeros] * (self.in_size) + [ones]
 
 
     def parse_row(self, tf_string):
         data = tf.io.decode_csv(tf.expand_dims(tf_string, axis=0), self.get_record_defaults())
-        features = data[self.offset:-1]
+        #features = data[self.offset:-1]
+        features = data [:-1]
         features = tf.stack(features, axis=-1)
         label = data[-1]
         features = tf.squeeze(features, axis=0)
@@ -177,8 +178,9 @@ class KANModel:
 
     def create_dataset(self):
         data = tf.data.TextLineDataset([self.data_file])
-        data = data.skip(1).shuffle(self.shuf_buffer, seed=self.seed_shuffle)
-        
+        #data = data.skip(1).shuffle(self.shuf_buffer, seed=self.seed_shuffle)
+        data = data.skip(1).shuffle(buffer_size=self.shuf_buffer, seed=self.seed_shuffle)
+    
         val_size = int(self.data_length * self.perc_eval)
         train_data = data.skip(val_size).batch(self.batch_size).repeat()
         val_data = data.take(val_size).batch(self.batch_size).repeat()
@@ -186,7 +188,10 @@ class KANModel:
         train_data = train_data.map(self.parse_row, num_parallel_calls=6)
         val_data = val_data.map(self.parse_row, num_parallel_calls=6)
 
-        return iter(train_data), iter(val_data)
+        iterator_train = iter(train_data)
+        iterator_val = iter(val_data)
+
+        return iterator_train, iterator_val
 
     def get_activation(self):
         if self.activation_function == 'sigmoid':
