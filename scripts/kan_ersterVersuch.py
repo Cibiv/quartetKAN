@@ -100,8 +100,9 @@ class KANModel:
         zeros = tf.zeros(shape=(1,), dtype=tf.float32)
         ones = tf.ones(shape=(1,), dtype=tf.float32)
         #num_features = 20 
-        #num_features = 19
-        num_features = 15 #ich habs beim Debuggen ausgeben lassen
+        # ich erhalte: Expect 16 fields but have 20 in record 0
+        num_features = 19
+        #num_features = 15 #ich habs beim Debuggen ausgeben lassen
         return [zeros] * num_features + [ones]
 
 
