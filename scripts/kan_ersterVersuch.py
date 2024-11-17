@@ -86,11 +86,17 @@ class KANModel:
      #   return [zeros] * (first_layer_units + self.offset) + [ones]
 
     
+   # def get_record_defaults(self):
+    #    zeros = tf.zeros(shape=(1,), dtype=tf.float32)
+     #   ones = tf.ones(shape=(1,), dtype=tf.float32)
+      #  total_features = sum(layer.get('units', 1) for layer in self.layers if layer['type'] == 'dense')
+       # return [zeros] * (total_features + self.offset) + [ones]
+
     def get_record_defaults(self):
         zeros = tf.zeros(shape=(1,), dtype=tf.float32)
         ones = tf.ones(shape=(1,), dtype=tf.float32)
-        total_features = sum(layer.get('units', 1) for layer in self.layers if layer['type'] == 'dense')
-        return [zeros] * (total_features + self.offset) + [ones]
+        num_features = 20 
+        return [zeros] * num_features + [ones]
 
 
     def parse_row(self, tf_string):
