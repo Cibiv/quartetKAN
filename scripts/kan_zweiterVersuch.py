@@ -146,8 +146,8 @@ class MLP:
         label = data[-1]
         features = tf.squeeze(features, axis = 0)
         label = tf.squeeze(label, axis = 0)
-        return features, label, adjacency_matrix
-
+        #return features, label, adjacency_matrix
+        return features, label
 
     # defines input pipeline for train data and returns dataset containing labelled features
     def create_dataset(self):
