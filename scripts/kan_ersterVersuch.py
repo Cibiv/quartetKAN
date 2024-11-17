@@ -50,6 +50,17 @@ class KANModel:
                         
                         self.log_level = data.get('log_level', 'info')
                         tf.compat.v1.logging.set_verbosity({'debug': 10, 'error': 40, 'fatal': 50, 'info': 20, 'warn': 30}.get(data['log_level'], 20))
+                        #initialisiere die Eingabegröße dynamisch
+                        self.in_size = None
+                        self.determine_input_size()  #dynamische Bestimmung der Eingabegröße
+
+                        
+                        self.logger = self.get_logger()
+                        self.logger.info("KAN initialized with parameters: " + str(data))
+                        #anzahl der eingabefeatures 
+                        #self.in_size = 19 #ich rate mal. Wieviele features gibt es im Datensatz?
+                        #self.in_size = 15 #ich hab es mir in der parse row func ausgeben lassen und es kam 15 raus 
+
                     except KeyError as e:
                         logging.error("Key error. Please refer to config file spec for more details", e)
                         exit(1)
@@ -60,12 +71,7 @@ class KANModel:
             logging.error("Config file not found")
             exit(1)
 
-        self.logger = self.get_logger()
-        self.logger.info("KAN initialized with parameters: " + str(data))
-        #anzahl der eingabefeatures 
-        self.in_size = 19 #ich rate mal. Wieviele features gibt es im Datensatz?
-        #self.in_size = 15 #ich hab es mir in der parse row func ausgeben lassen und es kam 15 raus 
-
+        
 
     def datetime_stamp(self):
         t = datetime.now().strftime('%Y%m%d_%H%M%S')
@@ -96,14 +102,39 @@ class KANModel:
       #  total_features = sum(layer.get('units', 1) for layer in self.layers if layer['type'] == 'dense')
        # return [zeros] * (total_features + self.offset) + [ones]
 
+    #def get_record_defaults(self):
+     #   zeros = tf.zeros(shape=(1,), dtype=tf.float32)
+      #  ones = tf.ones(shape=(1,), dtype=tf.float32)
+        #num_features = 20 
+        # ich erhalte: Expect 16 fields but have 20 in record 0
+       # num_features = 19
+        #num_features = 15 #ich habs beim Debuggen ausgeben lassen
+        #return [zeros] * num_features + [ones]
+
+    #funktion zur bestimmung der Anzahl an features (dafür)
+    #wird die erste zeile der csv datei genommen 
+    #(dynamisch ist besser als die zahl exakt reinschreiben)
+    def determine_input_size(self):
+        try:
+            with open(self.data_file, 'r') as file:
+                first_line = file.readline().strip()
+                #CSV-Zeile in eine Liste umwandeln
+                values = first_line.split(',')
+                #berechne die Anzahl der Features (ohne das Label)
+                self.in_size = len(values) - 1 - self.offset  # -1 für das Label, -offset für den Versatz
+            print(f"Dynamically determined input size: {self.in_size}")
+        except FileNotFoundError:
+            self.logger.error(f"Data file {self.data_file} not found.")
+            exit(1)
+        except Exception as e:
+            self.logger.error(f"Error determining input size: {e}")
+            exit(1)
+
+    #dynamische get records function:
     def get_record_defaults(self):
         zeros = tf.zeros(shape=(1,), dtype=tf.float32)
         ones = tf.ones(shape=(1,), dtype=tf.float32)
-        #num_features = 20 
-        # ich erhalte: Expect 16 fields but have 20 in record 0
-        num_features = 19
-        #num_features = 15 #ich habs beim Debuggen ausgeben lassen
-        return [zeros] * num_features + [ones]
+        return [zeros] * self.in_size + [ones]
 
 
     def parse_row(self, tf_string):
@@ -113,8 +144,8 @@ class KANModel:
         label = data[-1]
         features = tf.squeeze(features, axis=0)
         label = tf.squeeze(label, axis=0)
-        print(f"Features shape: {features.shape}") #zum debuggen um zu schauen was die Eingabedateien für ein type sind
-        print(f"Label shape: {label.shape}") #zum debuggen eingabedateien
+        #print(f"Features shape: {features.shape}") #zum debuggen um zu schauen was die Eingabedateien für ein type sind
+        #print(f"Label shape: {label.shape}") #zum debuggen eingabedateien
         return features, label
 
     def create_dataset(self):
