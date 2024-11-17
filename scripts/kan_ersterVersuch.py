@@ -142,7 +142,6 @@ class KANModel:
             if layer_type == 'dense':
                 self.model.add(DenseKAN(
                     units=units,
-                    kernel_initializer=self.weight_initializer,
                     use_bias=self.use_bias
                 ))
                 if activation:
@@ -154,13 +153,12 @@ class KANModel:
                 self.model.add(Conv2DKAN(
                     filters=filters,
                     kernel_size=kernel_size,
-                    kernel_initializer=self.weight_initializer,
                     use_bias=self.use_bias
                 ))
                 if activation:
                     self.model.add(keras.layers.Activation(activation))
 
-        #optionales Dropout hinzufügen (brauch ich das?)
+            #dropout hinzufügen (brauch ich das?)
             if self.dropout > 0:
                 self.model.add(keras.layers.Dropout(self.dropout))
 
