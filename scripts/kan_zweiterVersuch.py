@@ -4,6 +4,7 @@ import tensorflow.keras as keras
 import tfkan
 from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint, ReduceLROnPlateau
 from tensorflow.keras.optimizers import Adam
+from tfkan import GCN
 import logging
 import yaml
 import sys
@@ -226,16 +227,14 @@ class MLP:
         transfer = self.get_transfer()
 
         # Define Graph Neural Network architecture using tfkan
-        self.model = tfkan.models.GCN(
-            layers=self.layers,
-            activation=transfer,
-            dropout=self.dropout,
-            weight_initializer=w_init,
-            bias_initializer=b_init,
-            input_dim=self.layers[0],  # Set the input dimension based on the dataset
-            output_dim=self.layers[-1],  # Output dimension should match the number of classes
-            activation_function=activation
-        )
+        self.model = GCN(layers=self.layers,
+                 activation=transfer,
+                 dropout=self.dropout,
+                 weight_initializer=w_init,
+                 bias_initializer=b_init,
+                 input_dim=self.layers[0],
+                 output_dim=self.layers[-1],
+                 activation_function=activation)
 
     # initialize parameters
     def init_params(self):
