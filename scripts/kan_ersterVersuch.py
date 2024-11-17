@@ -80,9 +80,11 @@ class KANModel:
         return logger
     
     def get_record_defaults(self):
-        zeros = tf.zeros(shape = (1,), dtype = tf.float32)
-        ones = tf.ones(shape = (1,), dtype = tf.float32)
-        return [zeros] * (self.layers[0] + self.offset) + [ones]
+        zeros = tf.zeros(shape=(1,), dtype=tf.float32)
+        ones = tf.ones(shape=(1,), dtype=tf.float32)
+        first_layer_units = self.layers[0].get('units', 1)  # Anzahl der Einheiten der ersten Schicht
+        return [zeros] * (first_layer_units + self.offset) + [ones]
+
     
     def parse_row(self, tf_string):
         data = tf.io.decode_csv(tf.expand_dims(tf_string, axis=0), self.get_record_defaults())
