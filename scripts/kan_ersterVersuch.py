@@ -62,6 +62,8 @@ class KANModel:
 
         self.logger = self.get_logger()
         self.logger.info("KAN initialized with parameters: " + str(data))
+        #anzahl der eingabefeatures 
+        self.in_size = 19 #ich rate mal. Wieviele features gibt es im Datensatz?
 
     def datetime_stamp(self):
         t = datetime.now().strftime('%Y%m%d_%H%M%S')
@@ -107,6 +109,8 @@ class KANModel:
         label = data[-1]
         features = tf.squeeze(features, axis=0)
         label = tf.squeeze(label, axis=0)
+        print(f"Features shape: {features.shape}") #zum debuggen um zu schauen was die Eingabedateien für ein type sind
+        print(f"Label shape: {label.shape}") #zum debuggen eingabedateien
         return features, label
 
     def create_dataset(self):
