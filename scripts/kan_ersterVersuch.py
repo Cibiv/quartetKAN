@@ -46,7 +46,7 @@ class KANModel:
                                 else None
                         self.output_file = f"../log/{data['save_network_to']}_{timestamp}.log" if 'save_network_to' in data \
                                 else None
-                        self.self.weight_initializer = data['weight_initializer'] if 'weight_initializer' in data \
+                        self.weight_initializer = data['weight_initializer'] if 'weight_initializer' in data \
                                 else 'xavier'
                         self.transfer_function = data['transfer_function'] if 'transfer_function' in data else 'relu'
                         self.activation_function = data['activation_function'] if 'activation_function' in data \
@@ -158,22 +158,33 @@ class KANModel:
             exit(2)
         return transfer
 
+def build_kan_model(self):
+    """
+    KAN model mit tfkan bauen: 
+    """
+    self.model = keras.Sequential()
+    
+    for layer_config in self.layers:
+        layer_type = layer_config['type']
+        units = layer_config.get('units', 32)
+        activation = self.get_activation()
 
-    def build_kan_model(self):
-        """
-        KAN model mit tfkan bauen: 
-        """
-        self.model = KAN(
-            layers=self.layers,
-            activation = self.get_activation(),
-            #activation=self.transfer_function,
-            #output_activation=self.activation_function,
-            dropout_rate=self.dropout,
-            use_bias=True,
-            kernel_initializer=self.weight_initializer,
-            seed=self.seed_init
-        )
-        self.logger.info("KAN model architecture built")
+        if layer_type == 'dense':
+            self.model.add(DenseKAN(units=units, activation=activation, 
+                                    kernel_initializer=self.weight_initializer, 
+                                    use_bias=self.use_bias))
+        elif layer_type == 'conv2d':
+            filters = layer_config.get('filters', 32)
+            kernel_size = layer_config.get('kernel_size', (3, 3))
+            self.model.add(Conv2DKAN(filters=filters, kernel_size=kernel_size, activation=activation, 
+                                     kernel_initializer=self.weight_initializer, 
+                                     use_bias=self.use_bias))
+        if self.dropout > 0:
+            self.model.add(keras.layers.Dropout(self.dropout))
+    
+    #letzte Schicht (Ausgabeschicht)
+    self.model.add(DenseKAN(units=1, activation='sigmoid'))  
+    self.logger.info("KAN model architecture built")
 
     def compile_model(self):
         """
