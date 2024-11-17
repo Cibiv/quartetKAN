@@ -142,10 +142,11 @@ class KANModel:
             if layer_type == 'dense':
                 self.model.add(DenseKAN(
                     units=units,
-                    activation=activation,
                     kernel_initializer=self.weight_initializer,
                     use_bias=self.use_bias
                 ))
+                if activation:
+                    self.model.add(keras.layers.Activation(activation))
 
             elif layer_type == 'conv2d':
                 filters = layer_config.get('filters', 32)
@@ -153,17 +154,20 @@ class KANModel:
                 self.model.add(Conv2DKAN(
                     filters=filters,
                     kernel_size=kernel_size,
-                    activation=activation,
                     kernel_initializer=self.weight_initializer,
                     use_bias=self.use_bias
                 ))
+                if activation:
+                    self.model.add(keras.layers.Activation(activation))
 
-            #optionales Dropout hinzufügen (brauche ich das?)
+        #optionales Dropout hinzufügen (brauch ich das?)
             if self.dropout > 0:
                 self.model.add(keras.layers.Dropout(self.dropout))
 
         #ausgabeschicht
-        self.model.add(DenseKAN(units=1, activation=self.activation_function))
+        self.model.add(DenseKAN(units=1))
+        if self.activation_function:
+            self.model.add(keras.layers.Activation(self.activation_function))
         self.logger.info("KAN model architecture built with parameters from config file")
 
     def compile_model(self):
