@@ -15,71 +15,48 @@ from callbacks import TrainingPlot
 
 class KANModel:
     def __init__(self, path):
-        """
-        KAN model wird mit den Parametern aus dem config file initialisiert
-        """
         try:
             with open(path, 'r') as stream:
-                try: 
-                    data = yaml.safe_load(stream)
-                    try: 
-                        timestamp = self.datetime_stamp()
-                        self.dropout = data['dropout'] 
-                        self.layers = data['layers']
-                        self.learning_rate = data['learning_rate']
-                        self.batch_size = data['batch_size']
-                        self.epochs = data['epochs']
-                        self.no_epochs_dataset = data['no_epochs_dataset']
-                        self.perc_eval = data['perc_eval']
-                        self.data_file = data['data_file']
-                        self.data_length = data['data_length']
-                        self.save_network_to = f"../models/{data['save_network_to']}_{timestamp}" if 'save_network_to' in data else None
-                        self.output_file = f"../log/{data['save_network_to']}_{timestamp}.log" if 'save_network_to' in data else None
-                        self.weight_initializer = data.get('weight_initializer', 'xavier')
-                        self.transfer_function = data.get('transfer_function', 'relu')
-                        self.activation_function = data.get('activation_function', 'sigmoid')
-                        self.cost_function = data.get('cost_function', 'binary_crossentropy')
-                        self.optimizer_type = data.get('optimizer', 'adam')
-                        self.offset = data['offset']
-                        self.shuf_buffer = data.get('shuf_buffer', 1000)
-                        self.seed_init = data.get('seed_init', None)
-                        self.seed_shuffle = data.get('seed_shuffle', None)
-                        self.beta1 = data.get('beta1', 0.9)
-                        self.beta2 = data.get('beta2', 0.999)
-                        self.use_bias = data.get('use_bias', True)
-                        
-                        #self.determine_input_size()
+                data = yaml.safe_load(stream)
+                timestamp = self.datetime_stamp()
 
-                        self.in_size = 19
+                # Parameter aus der YAML-Datei laden
+                self.dropout = data['dropout']
+                self.layers = data['layers']
+                self.learning_rate = data['learning_rate']
+                self.batch_size = data['batch_size']
+                self.epochs = data['epochs']
+                self.no_epochs_dataset = data['no_epochs_dataset']
+                self.perc_eval = data['perc_eval']
+                self.data_file = data['data_file']
+                self.data_length = data['data_length']
+                self.save_network_to = f"../models/{data['save_network_to']}_{timestamp}"
+                self.output_file = f"../log/{data['save_network_to']}_{timestamp}.log"
+                self.weight_initializer = data.get('weight_initializer', 'xavier')
+                self.transfer_function = data.get('transfer_function', 'relu')
+                self.activation_function = data.get('activation_function', 'sigmoid')
+                self.cost_function = data.get('cost_function', 'binary_crossentropy')
+                self.optimizer_type = data.get('optimizer', 'adam')
+                self.offset = data['offset']
+                self.shuf_buffer = data.get('shuf_buffer', 1000)
+                self.seed_init = data.get('seed_init', None)
+                self.seed_shuffle = data.get('seed_shuffle', None)
+                self.beta1 = data.get('beta1', 0.9)
+                self.beta2 = data.get('beta2', 0.999)
+                self.use_bias = data.get('use_bias', True)
 
-                        self.log_level = data.get('log_level', 'info')
-                        tf.compat.v1.logging.set_verbosity({'debug': 10, 'error': 40, 'fatal': 50, 'info': 20, 'warn': 30}.get(data['log_level'], 20))
-                        #initialisiere die Eingabegröße dynamisch
-                        #self.in_size = None
-                        #self.determine_input_size()  #dynamische Bestimmung der Eingabegröße
+                # Eingabegröße bestimmen
+                self.determine_input_size()
+                
+                self.logger = self.get_logger()
+                self.logger.info("KAN initialized with parameters: " + str(data))
 
-                        
-                        self.logger = self.get_logger()
-                        self.logger.info("KAN initialized with parameters: " + str(data))
-                        #anzahl der eingabefeatures 
-                        #self.in_size = 19 #ich rate mal. Wieviele features gibt es im Datensatz?
-                        #self.in_size = 15 #ich hab es mir in der parse row func ausgeben lassen und es kam 15 raus 
-
-                    except KeyError as e:
-                        logging.error("Key error. Please refer to config file spec for more details", e)
-                        exit(1)
-                except yaml.scanner.ScannerError as e:
-                    logging.error("yaml config is not valid. Please provide valid yaml.", e)
-                    exit(1)
         except FileNotFoundError:
             logging.error("Config file not found")
             exit(1)
 
-        
-
     def datetime_stamp(self):
-        t = datetime.now().strftime('%Y%m%d_%H%M%S')
-        return t
+        return datetime.now().strftime('%Y%m%d_%H%M%S')
 
     def get_logger(self):
         logger = logging.getLogger('training')
@@ -92,114 +69,31 @@ class KANModel:
         logger.addHandler(sh)
         logger.setLevel(logging.INFO)
         return logger
- 
- #   def get_record_defaults(self):
-  #      zeros = tf.zeros(shape=(1,), dtype=tf.float32)
-   #     ones = tf.ones(shape=(1,), dtype=tf.float32)
-    #    first_layer_units = self.layers[0].get('units', 1)  # Anzahl der Einheiten der ersten Schicht
-     #   return [zeros] * (first_layer_units + self.offset) + [ones]
 
-    
-   # def get_record_defaults(self):
-    #    zeros = tf.zeros(shape=(1,), dtype=tf.float32)
-     #   ones = tf.ones(shape=(1,), dtype=tf.float32)
-      #  total_features = sum(layer.get('units', 1) for layer in self.layers if layer['type'] == 'dense')
-       # return [zeros] * (total_features + self.offset) + [ones]
-
-    #def get_record_defaults(self):
-     #   zeros = tf.zeros(shape=(1,), dtype=tf.float32)
-      #  ones = tf.ones(shape=(1,), dtype=tf.float32)
-        #num_features = 20 
-        # ich erhalte: Expect 16 fields but have 20 in record 0
-       # num_features = 19
-        #num_features = 15 #ich habs beim Debuggen ausgeben lassen
-        #return [zeros] * num_features + [ones]
-
-    #funktion zur bestimmung der Anzahl an features (dafür)
-    #wird die erste zeile der csv datei genommen 
-    #(dynamisch ist besser als die zahl exakt reinschreiben)
-    #def determine_input_size(self):
-     #   try:
-      #      with open(self.data_file, 'r') as file:
-       #         first_line = file.readline().strip()
-        #        #CSV-Zeile in eine Liste umwandeln
-         #       values = first_line.split(',')
-          #      #berechne die Anzahl der Features (ohne das Label)
-           #     self.in_size = len(values) - 1 - self.offset  # -1 für das Label, -offset für den Versatz
-            #print(f"Dynamically determined input size: {self.in_size}")
-       # except FileNotFoundError:
-        #    self.logger.error(f"Data file {self.data_file} not found.")
-         #   exit(1)
-        #except Exception as e:
-         #   self.logger.error(f"Error determining input size: {e}")
-          #  exit(1)
-
-#    def determine_input_size(self):
- #       """Bestimmt die Anzahl der Features basierend auf der 5. Zeile der CSV-Datei."""
-  #      try:
-   #         with open(self.data_file, 'r') as file:
-    #            #überspringe die ersten vier Zeilen
-     #           for _ in range(4):
-      #              file.readline()
-       #         
-        #        #fünfte zeile einlesen
-         #       fifth_line = file.readline().strip()
-          #      print(f"Fifth line of CSV: {fifth_line}")  #debugging: 5. Zeile anzeigen lassen
-           #     
-            #    #splitte die Zeile anhand des Kommas (CSV-Separator)
-             #   values = fifth_line.split(',')
-              #  print(f"Number of columns in fifth line: {len(values)}")  #debugging: Anzahl der Spalten in fünfter zeile
-#                
- #               #berechne die Anzahl der Features (ohne das Label in der letzten spalte)
-  #              self.in_size = len(values) - 1 - self.offset
-   #             print(f"Determined input size (features): {self.in_size}")
-    #    except FileNotFoundError:
-     #       self.logger.error(f"Data file {self.data_file} not found.")
-      #      exit(1)
-       # except Exception as e:
-        #    self.logger.error(f"Error determining input size: {e}")
-         #   exit(1)
-      
     def determine_input_size(self):
-        #lese die erste Zeile der CSV-Datei (nach der Kopfzeile), um die Anzahl der Spalten zu bestimmen
         with open(self.data_file, 'r') as file:
-            #überspringe die Kopfzeile
             header = file.readline()
-            #lese die nächste Zeile mit Daten
             line = file.readline().strip()
-        
-        #die Anzahl der Spalten in der Zeile minus 1 (für das Label)
         num_columns = len(line.split(','))
-        
-        # `self.offset` bestimmt, wie viele Spalten ignoriert werden sollen
-        self.in_size = num_columns - self.offset - 1  # Minus 1 für die Label-Spalte
+        self.in_size = num_columns - self.offset - 1
         print(f"Bestimmte Eingabegröße (in_size): {self.in_size}")
 
-
-    #dynamische get records function:
     def get_record_defaults(self):
         zeros = tf.zeros(shape=(1,), dtype=tf.float32)
         ones = tf.ones(shape=(1,), dtype=tf.float32)
-        return [zeros] * (self.in_size) + [ones]
-
+        return [zeros] * self.in_size + [ones]
 
     def parse_row(self, tf_string):
         data = tf.io.decode_csv(tf.expand_dims(tf_string, axis=0), self.get_record_defaults())
-        #features = data[self.offset:-1]
-        features = data [:-1]
+        features = data[:-1]
         features = tf.stack(features, axis=-1)
         label = data[-1]
-        features = tf.squeeze(features, axis=0)
-        label = tf.squeeze(label, axis=0)
-        #print(f"Features shape: {features.shape}") #zum debuggen um zu schauen was die Eingabedateien für ein type sind
-        #print(f"Label shape: {label.shape}") #zum debuggen eingabedateien
-        return features, label
+        return tf.squeeze(features, axis=0), tf.squeeze(label, axis=0)
 
     def create_dataset(self):
         data = tf.data.TextLineDataset([self.data_file])
-        #data = data.skip(1).shuffle(self.shuf_buffer, seed=self.seed_shuffle)
         data = data.skip(1).shuffle(buffer_size=self.shuf_buffer, seed=self.seed_shuffle)
-    
+
         val_size = int(self.data_length * self.perc_eval)
         train_data = data.skip(val_size).batch(self.batch_size).repeat()
         val_data = data.take(val_size).batch(self.batch_size).repeat()
@@ -207,10 +101,7 @@ class KANModel:
         train_data = train_data.map(self.parse_row, num_parallel_calls=6)
         val_data = val_data.map(self.parse_row, num_parallel_calls=6)
 
-        iterator_train = iter(train_data)
-        iterator_val = iter(val_data)
-
-        return iterator_train, iterator_val
+        return iter(train_data), iter(val_data)
 
     def get_activation(self):
         if self.activation_function == 'sigmoid':
@@ -223,19 +114,7 @@ class KANModel:
             self.logger.error(f'Activation function {self.activation_function} not implemented')
             exit(2)
 
-    def get_transfer(self):
-        if self.transfer_function == 'sigmoid':
-            return tf.nn.sigmoid
-        elif self.transfer_function == 'relu':
-            return tf.nn.relu
-        else:
-            self.logger.error(f'Transfer function {self.transfer_function} not implemented')
-            exit(2)
-
     def build_kan_model(self):
-        """
-        KAN Modell bauen
-        """
         self.model = keras.Sequential()
 
         for layer_config in self.layers:
@@ -244,41 +123,21 @@ class KANModel:
             activation = layer_config.get('activation', self.transfer_function)
 
             if layer_type == 'dense':
-                self.model.add(DenseKAN(
-                    units=units,
-                    use_bias=self.use_bias
-                ))
+                self.model.add(DenseKAN(units=units, use_bias=self.use_bias))
                 if activation:
                     self.model.add(keras.layers.Activation(activation))
 
-            elif layer_type == 'conv2d':
-                filters = layer_config.get('filters', 32)
-                kernel_size = layer_config.get('kernel_size', (3, 3))
-                self.model.add(Conv2DKAN(
-                    filters=filters,
-                    kernel_size=kernel_size,
-                    use_bias=self.use_bias
-                ))
-                if activation:
-                    self.model.add(keras.layers.Activation(activation))
-
-            #dropout hinzufügen (brauch ich das?)
             if self.dropout > 0:
                 self.model.add(keras.layers.Dropout(self.dropout))
 
-        #ausgabeschicht
         self.model.add(DenseKAN(units=1))
         if self.activation_function:
             self.model.add(keras.layers.Activation(self.activation_function))
-        self.logger.info("KAN model architecture built with parameters from config file")
+
+        self.logger.info("KAN model architecture built")
 
     def compile_model(self):
-        if self.optimizer_type == "adam":
-            optimizer = Adam(learning_rate=self.learning_rate, beta_1=self.beta1, beta_2=self.beta2, amsgrad=False)
-        else:
-            self.logger.error(f"Optimizer {self.optimizer_type} not implemented.")
-            exit(1)
-
+        optimizer = Adam(learning_rate=self.learning_rate, beta_1=self.beta1, beta_2=self.beta2)
         self.model.compile(optimizer=optimizer, loss=self.cost_function, metrics=['accuracy'])
         self.logger.info("Model compiled")
 
@@ -287,13 +146,12 @@ class KANModel:
         self.build_kan_model()
         self.compile_model()
 
-        #überprüfung der Eingabegröße 
         for features, label in train_it:
-            print(f"train self func: Training features shape: {features.shape}") 
-            print(f"train self func: Training label shape: {label.shape}")
-            break #nur der erste batch soll überprüft werden
+            print(f"Training features shape: {features.shape}")
+            print(f"Training label shape: {label.shape}")
+            break
 
-        model_checkpoint = ModelCheckpoint(filepath=self.save_network_to + '_{epoch:03d}-{accuracy:.3f}-{val_accuracy:.3f}', monitor='val_accuracy', mode='max', save_best_only=False, verbose=1)
+        model_checkpoint = ModelCheckpoint(filepath=self.save_network_to + '_{epoch:03d}-{val_accuracy:.3f}', monitor='val_accuracy', save_best_only=True, verbose=1)
         reduce_lr = ReduceLROnPlateau(monitor='val_loss', factor=0.8, patience=5, verbose=1)
         early_stopping = EarlyStopping(monitor='val_loss', patience=10, verbose=1)
         plot_curves = TrainingPlot(self.save_network_to, self.logger)
@@ -314,9 +172,8 @@ class KANModel:
 
 
 if __name__ == '__main__':
-    try:
-        kan_model = KANModel(sys.argv[1])
-        kan_model.train()
-    except IndexError:
-        logging.error("Please specify a path to a config file as the first command line argument")
+    if len(sys.argv) < 2:
+        logging.error("Please specify a path to a config file")
         exit(1)
+    kan_model = KANModel(sys.argv[1])
+    kan_model.train()
