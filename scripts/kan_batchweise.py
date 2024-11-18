@@ -82,7 +82,8 @@ class KANModel:
                         # number of columns in dataset file to be ignored
                         self.offset = data['offset']
                         # number of points which are shuffled at same time
-                        self.shuf_buffer = data['shuf_buffer'] if 'shuf_buffer' in data else 1000
+                        #self.shuf_buffer = data['shuf_buffer'] if 'shuf_buffer' in data else 1000
+                        self.shuf_buffer = data['shuf_buffer'] if 'shuf_buffer' in data else 1
                         # set tensorflow logging level
                         self.log_level = data['log_level'] if 'log_level' in data else 'info'
                         tf.compat.v1.logging.set_verbosity({'debug': 10, 'error': 40, 'fatal': 50, 'info': 20, 'warn': 30}
