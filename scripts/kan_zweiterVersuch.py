@@ -259,16 +259,14 @@ class KANModel:
         # add output layer with activation
   #      self.model.add(Dense(self.layers[-1], activation = activation, use_bias = self.use_bias, kernel_initializer = w_init, bias_initializer = b_init))
         self.model = tf.keras.models.Sequential([
-            DenseKAN(128, grid_size=3),
-            
+            DenseKAN(128, grid_size=3, input_shape=(self.layers[0],)),  #feste Eingabeform festlegen
             Dropout(self.dropout),
             DenseKAN(64, grid_size=3),
-            
             Dropout(self.dropout),
             DenseKAN(10, grid_size=3),
-            
-            tf.keras.layers.Dense(1, activation='sigmoid')
+            tf.keras.layers.Dense(1, activation='sigmoid')  #klassifikations-Output-Layer
         ])
+
 
         self.model.build(input_shape=(None, self.layers[0]))
 
