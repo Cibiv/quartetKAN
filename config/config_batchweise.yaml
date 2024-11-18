@@ -6,8 +6,7 @@ no_epochs_dataset: 10
 perc_eval: 0.1
 multiple_data: False
 data_file: "../data/processed/zone/train/train_zone_permuted_shuffled.csv"
-#data_length: 270000000
-data_length: 10
+data_length: 270000000
 save_network_to: "F-zoneNN"
 weight_initializer: xavier
 transfer_function: relu
