@@ -15,6 +15,13 @@ from datetime import datetime
 
 from callbacks import TrainingPlot
 
+import tensorflow as tf
+from keras.layers import Dense, Conv2D, GlobalAveragePooling2D
+from tfkan.layers import DenseKAN, Conv2DKAN
+
+import numpy as np
+from matplotlib import pyplot as plt
+
 
 """
 Neural network implementation (architecture: multi-layer perceptron) used for classification (distinguishing between Farris- and Felsenstein-type trees).
@@ -233,25 +240,36 @@ class KANModel:
         # build sequential architecture
         #########################
         #self.model = keras.Sequential()
-        self.model = tf.keras.models.Sequential([
-                    DenseKAN(4),
-                    DenseKAN(1)
-                ])
+   #     self.model = tf.keras.models.Sequential([
+    #                DenseKAN(4),
+     #               DenseKAN(1)
+      #          ])
         #########################
         # set input layer with as many nodes as first value in layer list (should be = #features)
         #self.model.add(Input(shape = (self.layers[0],)))
         ########################
-        self.model.build(input_shape=(None, 10))
+  #      self.model.build(input_shape=(None, 10))
         ########################
 
         # add interim layers with transfer function as activation and dropout
-        for l in range(1, len(self.layers) - 1):
-            self.model.add(Dense(self.layers[l], activation = transfer, use_bias = self.use_bias, kernel_initializer = w_init, bias_initializer = b_init))
-            self.model.add(Dropout(self.dropout))
+    #   for l in range(1, len(self.layers) - 1):
+     #       self.model.add(Dense(self.layers[l], activation = transfer, use_bias = self.use_bias, kernel_initializer = w_init, bias_initializer = b_init))
+      #      self.model.add(Dropout(self.dropout))
 
         # add output layer with activation
-        self.model.add(Dense(self.layers[-1], activation = activation, use_bias = self.use_bias, kernel_initializer = w_init, bias_initializer = b_init))
-    
+  #      self.model.add(Dense(self.layers[-1], activation = activation, use_bias = self.use_bias, kernel_initializer = w_init, bias_initializer = b_init))
+        self.model = tf.keras.models.Sequential([
+            Conv2DKAN(filters=8, kernel_size=5, strides=2, padding='valid', kan_kwargs={'grid_size': 3}),
+            tf.keras.layers.LayerNormalization(),
+            Conv2DKAN(filters=16, kernel_size=5, strides=2, padding='valid', kan_kwargs={'grid_size': 3}),
+            GlobalAveragePooling2D(),
+            DenseKAN(10, grid_size=3),
+            tf.keras.layers.Softmax()
+])
+        self.model.build(input_shape=(None, 28, 28, 1))
+       # self.model.summary()
+
+
 
     # initialize parameters
     def init_params(self):
@@ -290,10 +308,11 @@ class KANModel:
         # set optimizer, cost function and accuracy
         optm = self.optimizer()
         self.cost_function()
-        bin_acc = keras.metrics.BinaryAccuracy(name = "binary_accuracy", dtype = None, threshold = 0.5)
+        #bin_acc = keras.metrics.BinaryAccuracy(name = "binary_accuracy", dtype = None, threshold = 0.5)
         
         # compile model with optimizer, loss and accuracy
-        self.model.compile(loss = self.loss, optimizer = optm, metrics = [bin_acc])
+        #self.model.compile(loss = self.loss, optimizer = optm, metrics = [bin_acc])
+        self.model.compile(optimizer=tf.keras.optimizers.Adam(learning_rate=1e-3), loss='sparse_categorical_crossentropy', metrics=['accuracy'])
 
         # define that always the latest best model is saved on specified path according to validation accuracy
         model_checkpoint = ModelCheckpoint(filepath = self.save_network_to + '_{epoch:03d}-{binary_accuracy:.3f}-{val_binary_accuracy:.3f}', 
