@@ -303,6 +303,10 @@ class KANModel:
         # create datasets
         train_it, val_it = self.create_dataset()
 
+        ###################
+        train_it = train_it.map(lambda x, y: (tf.reshape(x, [-1, self.layers[0]]), y))
+        ###################
+
         # init parameters and define model architecture
         w_init, b_init = self.init_params()
         self.get_model(w_init, b_init)
