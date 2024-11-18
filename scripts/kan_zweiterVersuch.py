@@ -259,14 +259,15 @@ class KANModel:
         # add output layer with activation
   #      self.model.add(Dense(self.layers[-1], activation = activation, use_bias = self.use_bias, kernel_initializer = w_init, bias_initializer = b_init))
         self.model = tf.keras.models.Sequential([
-            Conv2DKAN(filters=8, kernel_size=5, strides=2, padding='valid', kan_kwargs={'grid_size': 3}),
-            tf.keras.layers.LayerNormalization(),
-            Conv2DKAN(filters=16, kernel_size=5, strides=2, padding='valid', kan_kwargs={'grid_size': 3}),
-            GlobalAveragePooling2D(),
-            DenseKAN(10, grid_size=3),
-            tf.keras.layers.Softmax()
-])
-        self.model.build(input_shape=(None, 28, 28, 1))
+            DenseKAN(128, grid_size=3, activation='relu'),
+            Dropout(self.dropout),
+            DenseKAN(64, grid_size=3, activation='relu'),
+            Dropout(self.dropout),
+            DenseKAN(10, grid_size=3, activation='relu'),
+            tf.keras.layers.Dense(1, activation='sigmoid')
+        ])
+        self.model.build(input_shape=(None, self.layers[0]))
+
        # self.model.summary()
 
 
@@ -312,7 +313,8 @@ class KANModel:
         
         # compile model with optimizer, loss and accuracy
         #self.model.compile(loss = self.loss, optimizer = optm, metrics = [bin_acc])
-        self.model.compile(optimizer=tf.keras.optimizers.Adam(learning_rate=1e-3), loss='sparse_categorical_crossentropy', metrics=['accuracy'])
+        #self.model.compile(optimizer=tf.keras.optimizers.Adam(learning_rate=1e-3), loss='sparse_categorical_crossentropy', metrics=['accuracy'])
+        self.model.compile(optimizer=optm, loss='binary_crossentropy', metrics=['accuracy'])
 
         # define that always the latest best model is saved on specified path according to validation accuracy
         model_checkpoint = ModelCheckpoint(filepath = self.save_network_to + '_{epoch:03d}-{binary_accuracy:.3f}-{val_binary_accuracy:.3f}', 
