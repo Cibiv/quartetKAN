@@ -20,7 +20,7 @@ from callbacks import TrainingPlot
 Neural network implementation (architecture: multi-layer perceptron) used for classification (distinguishing between Farris- and Felsenstein-type trees).
 It expects the path to a YAML config file as first argument (such as the ones specified in ./config). As second optional argument, the keyword 'train' can be given to start the training directly.
 """
-class MLP:
+class KANModel:
     # initializes the multi-layer perceptron with the parameters as specified in the config file
     def __init__(self, path):
         try:
@@ -239,7 +239,10 @@ class MLP:
                 ])
         #########################
         # set input layer with as many nodes as first value in layer list (should be = #features)
-        self.model.add(Input(shape = (self.layers[0],)))
+        #self.model.add(Input(shape = (self.layers[0],)))
+        ########################
+        self.model.build(input_shape=(None, 10))
+        ########################
 
         # add interim layers with transfer function as activation and dropout
         for l in range(1, len(self.layers) - 1):
@@ -324,9 +327,14 @@ class MLP:
 if __name__ == '__main__':
     try:
         # create MLP instance taking config path in first sys argument as input
-        nn = MLP(sys.argv[1])
+        #nn = MLP(sys.argv[1])
         # train network
-        nn.train()
+        #nn.train()
+
+        #############
+        kan_model = KANModel(sys.argv[1])
+        kan_model.train()
+        #############
     except IndexError as e:
         logging.error("Please specify a path to a config file as first commandline argument")
         exit(1)
