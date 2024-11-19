@@ -293,6 +293,16 @@ class MLP:
         # create datasets
         train_it, val_it = self.create_dataset()
 
+         ###################
+        train_it = tf.data.Dataset.from_generator(lambda: train_it, output_signature=(
+            tf.TensorSpec(shape=(None, self.layers[0]), dtype=tf.float32),
+            tf.TensorSpec(shape=(None,), dtype=tf.float32)
+        ))
+
+        train_it = train_it.map(lambda x, y: (tf.reshape(x, [-1, self.layers[0]]), y))
+        ###################
+
+
         # init parameters and define model architecture
         w_init, b_init = self.init_params()
         self.get_model(w_init, b_init)
