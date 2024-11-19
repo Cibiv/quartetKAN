@@ -327,7 +327,7 @@ class MLP:
         #               validation_data = val_it, 
         #               validation_steps = val_steps_epoch)
         #############################
-        self.model.ft(train_it,
+        self.model.fit(train_it,
                       val_it, 
                       epochs = self.epochs, 
                       batch_size =self.batch_size)
