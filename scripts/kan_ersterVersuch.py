@@ -158,6 +158,7 @@ class MLP:
         features = tf.squeeze(features, axis = 0)
         label = tf.squeeze(label, axis = 0)
         ###################
+        #value none shape error
         #features.set_shape([self.layers[0]])
         features.set_shape([None, self.layers[0]])  #rank-2 tensor
         ###################
@@ -256,7 +257,7 @@ class MLP:
         self.model.add(Input(shape = (self.layers[0],)))
         for l in range(1, len(self.layers) - 1):
             self.model.add(DenseKAN(self.layers[l]))
-            self.model.add(Dropout(self.dropout))
+            #self.model.add(Dropout(self.dropout))
         self.model.add(Dense(self.layers[-1], activation = activation, use_bias = self.use_bias, kernel_initializer = w_init, bias_initializer = b_init))
         #####################
         
