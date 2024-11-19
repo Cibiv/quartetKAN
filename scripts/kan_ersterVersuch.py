@@ -231,7 +231,7 @@ class MLP:
             DenseKAN(4),
             DenseKAN(1)
         ])
-        self.model.build(input_shape=(None, 19)) 
+        #self.model.build(input_shape=(None, 10)) 
         #####################
         
         # use activation, transfer function
