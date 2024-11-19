@@ -152,7 +152,8 @@ class MLP:
         features = tf.squeeze(features, axis = 0)
         label = tf.squeeze(label, axis = 0)
         ###################
-        features.set_shape([self.layers[0]])
+        #features.set_shape([self.layers[0]])
+        features.set_shape([None, self.layers[0]])  #rank-2 tensor
         ###################
         return features, label
 
