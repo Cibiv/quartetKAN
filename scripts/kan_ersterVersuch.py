@@ -226,17 +226,24 @@ class MLP:
     # define network architecture as defined by config
     def get_model(self, w_init, b_init):
 
+        # use activation, transfer function
+        activation = self.get_activation()
+        transfer = self.get_transfer()
+
         #####################
-        self.model = tf.keras.models.Sequential([
-            DenseKAN(4),
-            DenseKAN(1)
-        ])
+       # self.model = tf.keras.models.Sequential([
+       #     DenseKAN(4),
+       #     DenseKAN(1)
+       # ])
         #self.model.build(input_shape=(None, 10)) 
+        self.model = tf.keras.models.Sequential()
+        self.model.add(Input(shape = (self.layers[0],)))
+        for l in range(1, len(self.layers) - 1):
+            self.model.add(DenseKAN(self.layers[l]))
+            self.model.add(Dropout(self.dropout))
+        self.model.add(Dense(self.layers[-1], activation = activation, use_bias = self.use_bias, kernel_initializer = w_init, bias_initializer = b_init))
         #####################
         
-        # use activation, transfer function
-        #activation = self.get_activation()
-        #transfer = self.get_transfer()
         
         # build sequential architecture
         #self.model = keras.Sequential()
