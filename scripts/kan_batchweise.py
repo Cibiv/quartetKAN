@@ -275,15 +275,44 @@ class KANModel:
 
         # add output layer with activation
   #      self.model.add(Dense(self.layers[-1], activation = activation, use_bias = self.use_bias, kernel_initializer = w_init, bias_initializer = b_init))
-        self.model = tf.keras.models.Sequential([
-            DenseKAN(128, grid_size=3, input_shape=(self.layers[0],)),  #feste Eingabeform festlegen
-            Dropout(self.dropout),
-            DenseKAN(64, grid_size=3),
-            Dropout(self.dropout),
-            DenseKAN(10, grid_size=3),
-            tf.keras.layers.Dense(1, activation='sigmoid')  #klassifikations-Output-Layer
-        ])
+  #      self.model = tf.keras.models.Sequential([
+   #         DenseKAN(128, grid_size=3, input_shape=(self.layers[0],)),  #feste Eingabeform festlegen
+   #         Dropout(self.dropout),
+   #         DenseKAN(64, grid_size=3),
+   #         Dropout(self.dropout),
+   #         DenseKAN(10, grid_size=3),
+   #         tf.keras.layers.Dense(1, activation='sigmoid')  #klassifikations-Output-Layer
+   #     ])
+        self.model = keras.Sequential()
 
+        # Eingabeschicht
+        self.model.add(DenseKAN(
+            units=self.layers[0],  # Größe der Eingabeschicht
+            activation=transfer,
+            use_bias=self.use_bias,
+            kernel_initializer=w_init,
+            bias_initializer=b_init
+        ))
+
+        # Zwischenschichten dynamisch hinzufügen
+        for l in range(1, len(self.layers) - 1):
+            self.model.add(DenseKAN(
+                units=self.layers[l],
+                activation=transfer,
+                use_bias=self.use_bias,
+                kernel_initializer=w_init,
+                bias_initializer=b_init
+            ))
+            self.model.add(Dropout(self.dropout))
+
+        # Ausgangsschicht
+        self.model.add(DenseKAN(
+            units=self.layers[-1],  # Größe der Ausgabeschicht
+            activation=None,  # Keine Aktivierungsfunktion für Regression
+            use_bias=self.use_bias,
+            kernel_initializer=w_init,
+            bias_initializer=b_init
+        ))
 
         self.model.build(input_shape=(None, self.layers[0]))
 
