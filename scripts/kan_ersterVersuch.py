@@ -151,6 +151,9 @@ class MLP:
         label = data[-1]
         features = tf.squeeze(features, axis = 0)
         label = tf.squeeze(label, axis = 0)
+        ###################
+        features.set_shape([self.layers[0]])
+        ###################
         return features, label
 
 
