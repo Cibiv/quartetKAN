@@ -18,3 +18,4 @@ offset: 4
 seed_init: 1 # use fix seeds to reproduce the network exactly else remove seeds
 seed_shuffle: 1
 log_level: info # can be debug, error, fatal, info or warn
+shuf_buffer: 1
