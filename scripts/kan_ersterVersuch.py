@@ -182,24 +182,38 @@ class MLP:
 
         ##########################
         #reduce datase parallelism?
-        train_data = train_data.map(self.parse_row, num_parallel_calls = 1)
-        val_data = val_data.map(self.parse_row, num_parallel_calls = 1)
-        
-        train_data = tf.data.Dataset.from_generator(
-            lambda: iter(train_data),
-            output_signature=(
-                tf.TensorSpec(shape=(self.batch_size, self.layers[0]), dtype=tf.float32),
-                tf.TensorSpec(shape=(self.batch_size,), dtype=tf.float32)
-            )
-        )
+        #train_data = train_data.map(self.parse_row, num_parallel_calls = 1)
+        #val_data = val_data.map(self.parse_row, num_parallel_calls = 1)
+        train_data = tf.data.Dataset.from_generator(lambda: train_data, output_signature=(
+            tf.TensorSpec(shape=(None, self.layers[0]), dtype=tf.float32),
+            tf.TensorSpec(shape=(None,), dtype=tf.float32)
+        ))
 
-        val_data = tf.data.Dataset.from_generator(
-            lambda: iter(val_data),
-            output_signature=(
-                tf.TensorSpec(shape=(self.batch_size, self.layers[0]), dtype=tf.float32),
-                tf.TensorSpec(shape=(self.batch_size,), dtype=tf.float32)
-            )
-        )
+        train_data = train_data.map(lambda x, y: (tf.reshape(x, [-1, self.layers[0]]), y))
+       
+        val_data = tf.data.Dataset.from_generator(lambda: val_data, output_signature=(
+            tf.TensorSpec(shape=(None, self.layers[0]), dtype=tf.float32),
+            tf.TensorSpec(shape=(None,), dtype=tf.float32)
+        ))
+
+        val_data = val_data.map(lambda x, y: (tf.reshape(x, [-1, self.layers[0]]), y))
+       
+
+   #     train_data = tf.data.Dataset.from_generator(
+   #         lambda: iter(train_data),
+   #         output_signature=(
+   #             tf.TensorSpec(shape=(self.batch_size, self.layers[0]), dtype=tf.float32),
+   #             tf.TensorSpec(shape=(self.batch_size,), dtype=tf.float32)
+   #         )
+   #     )
+
+   #     val_data = tf.data.Dataset.from_generator(
+    #        lambda: iter(val_data),
+     #       output_signature=(
+     #           tf.TensorSpec(shape=(self.batch_size, self.layers[0]), dtype=tf.float32),
+      #          tf.TensorSpec(shape=(self.batch_size,), dtype=tf.float32)
+       #     )
+        #)
         ##########################
         # create an iterator for data
        # iterator_train = iter(train_data)
