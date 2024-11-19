@@ -15,6 +15,12 @@ from callbacks import TrainingPlot
 from tfkan import layers
 from tfkan.layers import DenseKAN
 
+####################
+#limit thread usage
+tf.config.threading.set_intra_op_parallelism_threads(1)
+tf.config.threading.set_inter_op_parallelism_threads(1)
+####################
+
 
 """
 Neural network implementation (architecture: KAN) used for classification (distinguishing between Farris- and Felsenstein-type trees).
@@ -170,8 +176,14 @@ class MLP:
         val_data = data.take(val_size).batch(self.batch_size).repeat()
 
         # define which part of data are loaded as features and label
-        train_data = train_data.map(self.parse_row, num_parallel_calls = 6)
-        val_data = val_data.map(self.parse_row, num_parallel_calls = 6)
+      #  train_data = train_data.map(self.parse_row, num_parallel_calls = 6)
+      #  val_data = val_data.map(self.parse_row, num_parallel_calls = 6)
+
+        ##########################
+        #reduce datase parallelism?
+        train_data = train_data.map(self.parse_row, num_parallel_calls = 1)
+        val_data = val_data.map(self.parse_row, num_parallel_calls = 1)
+        ##########################
 
         # create an iterator for data
         iterator_train = iter(train_data)
