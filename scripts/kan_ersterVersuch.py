@@ -202,10 +202,12 @@ class MLP:
         )
         ##########################
         # create an iterator for data
-        iterator_train = iter(train_data)
-        iterator_val = iter(val_data)
+       # iterator_train = iter(train_data)
+       # iterator_val = iter(val_data)
 
-        return iterator_train, iterator_val
+      #  return iterator_train, iterator_val
+      #########################
+        return train_data, val_data
 
 
     # returns the cost function as specified in the config file (MSE or sigmoid cross-entropy)
