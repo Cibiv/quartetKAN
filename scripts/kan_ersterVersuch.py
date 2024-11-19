@@ -294,12 +294,28 @@ class MLP:
         train_it, val_it = self.create_dataset()
 
          ###################
-        train_it = tf.data.Dataset.from_generator(lambda: train_it, output_signature=(
-            tf.TensorSpec(shape=(None, self.layers[0]), dtype=tf.float32),
-            tf.TensorSpec(shape=(None,), dtype=tf.float32)
-        ))
+      #  train_it = tf.data.Dataset.from_generator(lambda: train_it, output_signature=(
+      #      tf.TensorSpec(shape=(None, self.layers[0]), dtype=tf.float32),
+      #      tf.TensorSpec(shape=(None,), dtype=tf.float32)
+      #  ))
 
-        train_it = train_it.map(lambda x, y: (tf.reshape(x, [-1, self.layers[0]]), y))
+      #  train_it = train_it.map(lambda x, y: (tf.reshape(x, [-1, self.layers[0]]), y))
+        ###################
+        train_it = tf.data.Dataset.from_generator(
+            lambda: iter(train_it),
+            output_signature=(
+                tf.TensorSpec(shape=(self.batch_size, self.layers[0]), dtype=tf.float32),
+                tf.TensorSpec(shape=(self.batch_size,), dtype=tf.float32)
+            )
+        )
+
+        val_it = tf.data.Dataset.from_generator(
+            lambda: iter(val_it),
+            output_signature=(
+                tf.TensorSpec(shape=(self.batch_size, self.layers[0]), dtype=tf.float32),
+                tf.TensorSpec(shape=(self.batch_size,), dtype=tf.float32)
+            )
+        )
         ###################
 
 
