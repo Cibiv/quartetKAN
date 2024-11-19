@@ -172,20 +172,20 @@ class KANModel:
     def create_dataset(self):
         # create TextLineDataset, ship header and shuffle it
         data = tf.data.TextLineDataset([self.data_file])
-        #data = data.skip(1).shuffle(buffer_size = self.shuf_buffer, seed = self.seed_shuffle)
+        data = data.skip(1).shuffle(buffer_size = self.shuf_buffer, seed = self.seed_shuffle)
 
         ######################
         #Test: nur die ersten zehn Zeilen von meinem csv laden
-        data = data.skip(1) #kopfzeile weglassen
-        data = data.take(10)  # nur die ersten 10 Zeilen laden
+        #data = data.skip(1) #kopfzeile weglassen
+        #data = data.take(10)  # nur die ersten 10 Zeilen laden
 
-        data = data.shuffle(buffer_size=self.shuf_buffer, seed=self.seed_shuffle)
+        #data = data.shuffle(buffer_size=self.shuf_buffer, seed=self.seed_shuffle)
 
-        val_size = int (10 * self.perc_eval)
+        #val_size = int (10 * self.perc_eval)
         ######################
 
         # the first perc_eval fraction of data is used for validation, the rest for training
-        #val_size = int(self.data_length * self.perc_eval)
+        val_size = int(self.data_length * self.perc_eval)
         train_data = data.skip(val_size).batch(self.batch_size).repeat()
         val_data = data.take(val_size).batch(self.batch_size).repeat()
 
