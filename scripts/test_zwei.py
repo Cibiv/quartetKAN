@@ -70,9 +70,25 @@ def test(model):
         tmp_accuracies['accuracy'].append(score_far)
         tmp_accuracies['accuracy'].append(score_fel)
 
-    # create dataframe from table dict
+  # create dataframe from table dict
     df = pd.DataFrame.from_dict(tmp_accuracies)
+    df['zone'] = np.where(df['pProb'] >= (-18*df['qProb'] + 24*df['qProb']**2 + np.sqrt(243*df['qProb'] - 567*df['qProb']**2 + 648*df['qProb']**3 - 288*df['qProb']**4))/(9 - 24*df['qProb'] +32*df['qProb']**2),1,0)
 
+    acc_far = df[df['tree']=='farris']['accuracy'].mean()
+    acc_far_z = df[(df['tree']=='farris') & (df['zone']==1)]['accuracy'].mean()
+    acc_far_n = df[(df['tree']=='farris') & (df['zone']==0)]['accuracy'].mean()
+    acc_fel = df[df['tree']=='felsenstein']['accuracy'].mean()
+    acc_fel_z = df[(df['tree']=='felsenstein') & (df['zone']==1)]['accuracy'].mean()
+    acc_fel_n = df[(df['tree']=='felsenstein') & (df['zone']==0)]['accuracy'].mean()
+    acc_avg = df['accuracy'].mean()
+    acc_avg_z = df[df['zone']==1]['accuracy'].mean()
+    acc_avg_n = df[df['zone']==0]['accuracy'].mean()
+
+    logging.info(f'Acc. on Far: {acc_far:.4f} (in_zone: {acc_far_z:.4f}, out_zone: {acc_far_n:.4f})')
+    logging.info(f'Acc. on Fel: {acc_fel:.4f} (in_zone: {acc_fel_z:.4f}, out_zone: {acc_fel_n:.4f})')
+    logging.info(f'Acc. on avg: {acc_avg:.4f} (in_zone: {acc_avg_z:.4f}, out_zone: {acc_avg_n:.4f})')
+
+  
     # split Farris and Felsenstein data
     df_fels = df.loc[df['tree'] == 'felsenstein'].drop('tree', axis = 1)
     df_farris = df.loc[df['tree'] == 'farris'].drop('tree', axis = 1)
@@ -82,14 +98,9 @@ def test(model):
     df_farris = df_farris.sort_values(['pProb'], ascending = [True])
 
     # generate table containing branch parameters and accuracy for Farris/Felsenstein trees of these parameters
-    df_output = pd.merge(df_farris, df_fels, on = ['pProb', 'qProb'], how = 'outer')
+    df_output = pd.merge(df_farris, df_fels, on = ['pProb', 'qProb', 'zone'], how = 'outer')
     df_output = df_output.rename(index = str, columns = {"accuracy_x": "Far", "accuracy_y": "Fel"})
-    df_output['Prob'] = 'p' + df_output['pProb'].apply(lambda x: round(x, 3)).astype(str) + '_q' + df_output['qProb'].apply(lambda x: round(x, 3)).astype(str)
-    df_output = df_output[['Prob', 'Far', 'Fel']]
-
-    logging.info(f'Acc. on Far: {df_output["Far"]}')
-    logging.info(f'Acc. on Fel: {df_output["Fel"]}')
-    logging.info(f'Acc. on avg: {(df_output["Far"]+df_output["Fel"])/2}')
+    df_output = df_output[['pProb', 'qProb', 'zone', 'Far', 'Fel']]
 
     # save accuracy table to file
     name = f'{output}_test_seqLen_{args["seqlen"]}.csv'
@@ -109,14 +120,12 @@ def test(model):
 
 # get accuracies for tree-type, p- and q-value
 def testToAccuracy(df):
-    df['probp'] = df['Prob'].apply(lambda x: x[1:6])
-    df['probq'] = df['Prob'].apply(lambda x: x[8:13])
     far_df = df
     far_df['acc'] = far_df['Far'] / 100
-    far_df = far_df.drop(['Prob', 'Fel', 'Far'], axis = 1)
+    far_df = far_df.drop(['zone','Fel', 'Far'], axis = 1)
     fel_df = df
     fel_df['acc'] = fel_df['Fel'] / 100
-    fel_df = fel_df.drop(['Prob', 'Fel', 'Far'], axis = 1)
+    fel_df = fel_df.drop(['zone','Fel', 'Far'], axis = 1)
 
     return far_df, fel_df
 
@@ -124,9 +133,9 @@ def testToAccuracy(df):
 # generate 2d array with rows containing accuracies for fixed p parameter and columns those of fixed q parameter
 def getPivot(file):
     df = file
-    df = df.sort_values(['probp', 'probq'], ascending = [True, True])
+    df = df.sort_values(['pProb', 'qProb'], ascending = [True, True])
     df['acc'] = df['acc'].round(2)
-    df = df.pivot(index = "probp", columns = "probq", values = "acc")
+    df = df.pivot(index = "pProb", columns = "qProb", values = "acc")
     return df
 
 
