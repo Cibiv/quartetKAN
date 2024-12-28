@@ -84,6 +84,29 @@ def test(model):
     acc_avg_z = df[df['zone']==1]['accuracy'].mean()
     acc_avg_n = df[df['zone']==0]['accuracy'].mean()
 
+    ######
+    #model overview in dem csv hinzufügen
+    ######
+    epoch = int(args['model'][args['model'].rfind('_')+1:args['model'].rfind('_')+1+args['model'][args['model'].rfind('_')+1:].find('-')])
+
+
+    log = open(args['model'][:args['model'].rfind('_')].replace('models', 'log') + '.log', 'r')
+
+    for line in log.readlines():
+        if line.startswith('layers: '):
+            layer = line.replace('layers: ', '')[:-1]
+        elif line.startswith('learning_rate: '):
+            lr = line.replace('learning_rate: ', '')[:-1]
+        elif line.startswith('batch_size: '):
+            batch_size = line.replace('batch_size: ', '')[:-1]
+        elif 'INFO: Epoch 1:' in line:
+            break
+
+
+    with open("../results/overview.csv", "a") as overview:
+        overview.write(f'{args["model"]},{epoch},{layer},{lr},{batch_size},{acc_far:.4f},{acc_fel:.4f},{acc_avg:.4f},{acc_far_z:.4f},{acc_fel_z:.4f},{acc_avg_z:.4f},{acc_far_n:.4f},{acc_fel_n:.4f},{acc_avg_n:.4f}\n')
+    #######
+    
     logging.info(f'Acc. on Far: {acc_far:.4f} (in_zone: {acc_far_z:.4f}, out_zone: {acc_far_n:.4f})')
     logging.info(f'Acc. on Fel: {acc_fel:.4f} (in_zone: {acc_fel_z:.4f}, out_zone: {acc_fel_n:.4f})')
     logging.info(f'Acc. on avg: {acc_avg:.4f} (in_zone: {acc_avg_z:.4f}, out_zone: {acc_avg_n:.4f})')
