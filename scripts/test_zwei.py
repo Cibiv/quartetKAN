@@ -13,15 +13,6 @@ from pylab import *
 
 matplotlib.use('Agg')
 
-# log to stdout
-logging.basicConfig(
-    level = logging.INFO,
-    format = '%(asctime)s %(levelname)s: %(message)s',
-    datefmt = '%d.%m.%y %H:%M:%S',
-    handlers = [logging.StreamHandler()]
-)
-
-
 # pass arguments with flags
 parser = argparse.ArgumentParser()
 
@@ -31,6 +22,15 @@ parser.add_argument("-l", "--seqlen", default = '1000bp', help = "Sequence Lengt
 parser.add_argument("-o", "--offset", type = int, default = 4, help = "Index of first feature column.")
 parser.add_argument("-n", "--no_feat", type = int, default = 15, help = "Number of feature columns.")
 args = vars(parser.parse_args())
+
+# log to stdout
+log_file = args["model"].replace("/models/","/log/")+"_test.log"
+logging.basicConfig(
+    level = logging.INFO,
+    format = '%(asctime)s %(levelname)s: %(message)s',
+    datefmt = '%d.%m.%y %H:%M:%S',
+    handlers = [logging.StreamHandler(), logging.FileHandler(log_file)]
+)
 
 
 def test(model):
