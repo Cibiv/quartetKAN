@@ -26,6 +26,11 @@ args = vars(parser.parse_args())
 
 model = keras.saving.load_model(args['model'])
 
+#print the model summary
+model.summary()
+
+
+
 #model.plot()
 #model.symbolic_formula()[0][0]
 
@@ -34,6 +39,6 @@ model = keras.saving.load_model(args['model'])
 
 
 # with a Sequential model
-get_3rd_layer_output = K.function([model.layers[0].input],
-                                  [model.layers[1].output])
-layer_output = get_3rd_layer_output([1])[0]
+#get_3rd_layer_output = K.function([model.layers[0].input],
+ #                                 [model.layers[1].output])
+#layer_output = get_3rd_layer_output([1])[0]
