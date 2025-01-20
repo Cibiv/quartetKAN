@@ -28,5 +28,5 @@ model = keras.saving.load_model(args['model'])
 #model.plot()
 #model.symbolic_formula()[0][0]
 
-print(model.plot())
+#print(model.plot())
 print(model.symbolic_formula()[0][0])
