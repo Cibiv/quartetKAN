@@ -82,9 +82,18 @@ from tensorflow.keras.utils import plot_model
 #hier gibt es mehr infos was man alles anzeigen lassen kann 
 ####
 
-plot_model(model, to_file='../results/model.png', show_layer_activations=True, show_trainable=True)
+plot_model(model, to_file='../results/model.png', show_layer_activations=True, show_trainable=True, show_shapes=True, show_dtype=True, show_layer_names=True, expand_nested=True)
 #show_layer_activations=False,
  #   show_trainable=False,
+
+#    show_shapes=False,
+ #   show_dtype=False,
+  #  show_layer_names=False,
+   # rankdir='TB',
+#    expand_nested=False,
+ #   dpi=200,
+  #  show_layer_activations=False,
+   # show_trainable=False,
 
 #funktioniert nicht:
 #model.symbolic_formula()[0][0]
