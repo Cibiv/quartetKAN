@@ -73,7 +73,7 @@ from keras.utils import plot_model
 from tensorflow.keras.utils import plot_model
 #tf.keras.utils.plot_model()
 #plot_model(model=model, show_shapes=True)
-plot_model(restored_keras_model, to_file='../results/model.png')
+plot_model(model, to_file='../results/model.png')
 
 #funktioniert nicht:
 #model.symbolic_formula()[0][0]
