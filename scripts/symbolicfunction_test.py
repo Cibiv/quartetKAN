@@ -73,7 +73,18 @@ from keras.utils import plot_model
 from tensorflow.keras.utils import plot_model
 #tf.keras.utils.plot_model()
 #plot_model(model=model, show_shapes=True)
-plot_model(model, to_file='../results/model.png')
+
+#Hiermit habe ich ein kleines png bild von meinem model erstellt, es enthält aber wirklich nicht viel. nur pfeile und wenig infos (DENSEKAN oder DENSE layer)
+#plot_model(model, to_file='../results/model.png')
+
+###
+#https://www.tensorflow.org/api_docs/python/tf/keras/utils/plot_model?hl=en 
+#hier gibt es mehr infos was man alles anzeigen lassen kann 
+####
+
+plot_model(model, to_file='../results/model.png', show_layer_activations=False)
+#show_layer_activations=False,
+ #   show_trainable=False,
 
 #funktioniert nicht:
 #model.symbolic_formula()[0][0]
