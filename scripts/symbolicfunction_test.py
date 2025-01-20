@@ -56,22 +56,19 @@ model.summary()
 #####
 #output: einfach suuuuper viele Zahlen, gar nicht übersichtlich :( 
 #####
-for layer in model.layers:
-    print(f"Layer name: {layer.name}, Layer type: {type(layer)}")
-    if hasattr(layer, 'activation'):
-        print(f"Activation: {layer.activation}")
+#for layer in model.layers:
+ #   print(f"Layer name: {layer.name}, Layer type: {type(layer)}")
+  #  if hasattr(layer, 'activation'):
+   #     print(f"Activation: {layer.activation}")
 
-for layer in model.layers:
-    if hasattr(layer, 'weights'):
-        weights = layer.get_weights()
-        print(f"Weights for layer {layer.name}: {weights}")
-
-
+#for layer in model.layers:
+ #   if hasattr(layer, 'weights'):
+  #      weights = layer.get_weights()
+   #     print(f"Weights for layer {layer.name}: {weights}")
 
 
 
-#funktioniert nicht:
-#model.plot()
+model.plot()
 
 #funktioniert nicht:
 #model.symbolic_formula()[0][0]
