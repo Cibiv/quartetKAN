@@ -67,8 +67,11 @@ model.summary()
    #     print(f"Weights for layer {layer.name}: {weights}")
 
 
-
-model.plot()
+#klappt nicht 
+#model.plot()
+from tensorflow.keras.utils import plot_model
+#tf.keras.utils.plot_model()
+plot_model(model=model, show_shapes=True)
 
 #funktioniert nicht:
 #model.symbolic_formula()[0][0]
