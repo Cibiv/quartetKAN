@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 import tensorflow.keras as keras
+from keras import backend as K
 
 import argparse
 import logging
@@ -29,4 +30,10 @@ model = keras.saving.load_model(args['model'])
 #model.symbolic_formula()[0][0]
 
 #print(model.plot())
-print(model.symbolic_formula()[0][0])
+#print(model.symbolic_formula()[0][0])
+
+
+# with a Sequential model
+get_3rd_layer_output = K.function([model.layers[0].input],
+                                  [model.layers[3].output])
+layer_output = get_3rd_layer_output([x])[0]
