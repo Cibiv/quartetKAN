@@ -29,6 +29,16 @@ model = keras.saving.load_model(args['model'])
 #print the model summary
 model.summary()
 
+#iterate through layers and extract weights and biases
+for layer in model.layers:
+    print(f"Layer: {layer.name}")
+    if hasattr(layer, 'get_weights'):
+        weights = layer.get_weights()
+        if len(weights) > 0:
+            print(f"  Weights: {weights[0]}")  #weight matrix
+            print(f"  Biases: {weights[1]}")   #bias vector
+
+
 
 
 #model.plot()
