@@ -82,7 +82,7 @@ from tensorflow.keras.utils import plot_model
 #hier gibt es mehr infos was man alles anzeigen lassen kann 
 ####
 
-plot_model(model, to_file='../results/model.png', show_layer_activations=True)
+plot_model(model, to_file='../results/model.png', show_layer_activations=True, show_trainable=True)
 #show_layer_activations=False,
  #   show_trainable=False,
 
