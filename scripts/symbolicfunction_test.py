@@ -44,6 +44,17 @@ for layer in model.layers:
     if hasattr(layer, 'activation'):
         print(f"Layer: {layer.name}, Activation: {layer.activation.__name__}")
 
+#######
+##output: Layer: dense, Activation: sigmoid
+######
+
+
+#check for custom layers or spline-related components
+for layer in model.layers:
+        if hasattr(layer, 'get_weights'):
+            print(f"  Weights and parameters: {layer.get_weights()}")
+
+
 
 
 
