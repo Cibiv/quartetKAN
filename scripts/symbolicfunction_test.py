@@ -30,13 +30,20 @@ model = keras.saving.load_model(args['model'])
 model.summary()
 
 #iterate through layers and extract weights and biases
+#for layer in model.layers:
+ #   print(f"Layer: {layer.name}")
+  #  if hasattr(layer, 'get_weights'):
+   #     weights = layer.get_weights()
+    #    if len(weights) > 0:
+     #       print(f"  Weights: {weights[0]}")  #weight matrix
+      #      print(f"  Biases: {weights[1]}")   #bias vector
+
+
+#print activation functions for each layer
 for layer in model.layers:
-    print(f"Layer: {layer.name}")
-    if hasattr(layer, 'get_weights'):
-        weights = layer.get_weights()
-        if len(weights) > 0:
-            print(f"  Weights: {weights[0]}")  #weight matrix
-            print(f"  Biases: {weights[1]}")   #bias vector
+    if hasattr(layer, 'activation'):
+        print(f"Layer: {layer.name}, Activation: {layer.activation.__name__}")
+
 
 
 
@@ -46,6 +53,8 @@ for layer in model.layers:
 
 #print(model.plot())
 #print(model.symbolic_formula()[0][0])
+
+
 
 
 # with a Sequential model
