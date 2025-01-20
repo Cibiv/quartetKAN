@@ -56,11 +56,17 @@ model.summary()
 #####
 #output: einfach suuuuper viele Zahlen, gar nicht übersichtlich :( 
 #####
+for layer in model.layers:
+    print(f"Layer name: {layer.name}, Layer type: {type(layer)}")
+    if hasattr(layer, 'activation'):
+        print(f"Activation: {layer.activation}")
 
-from tfkan.symbolic import symbolic_function_extraction
+for layer in model.layers:
+    if hasattr(layer, 'weights'):
+        weights = layer.get_weights()
+        print(f"Weights for layer {layer.name}: {weights}")
 
-symbolic_function = symbolic_function_extraction(model)
-print(f"Symbolic function: {symbolic_function}")
+
 
 
 
