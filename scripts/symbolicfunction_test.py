@@ -36,4 +36,4 @@ model = keras.saving.load_model(args['model'])
 # with a Sequential model
 get_3rd_layer_output = K.function([model.layers[0].input],
                                   [model.layers[1].output])
-layer_output = get_3rd_layer_output([x])[0]
+layer_output = get_3rd_layer_output([1])[0]
