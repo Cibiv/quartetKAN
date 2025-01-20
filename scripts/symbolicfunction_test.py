@@ -40,9 +40,9 @@ model.summary()
 
 
 #print activation functions for each layer
-for layer in model.layers:
-    if hasattr(layer, 'activation'):
-        print(f"Layer: {layer.name}, Activation: {layer.activation.__name__}")
+#for layer in model.layers:
+ #   if hasattr(layer, 'activation'):
+  #      print(f"Layer: {layer.name}, Activation: {layer.activation.__name__}")
 
 #######
 ##output: Layer: dense, Activation: sigmoid
@@ -50,13 +50,17 @@ for layer in model.layers:
 
 
 
-for layer in model.layers:
-        if hasattr(layer, 'get_weights'):
-            print(f"  Weights and parameters: {layer.get_weights()}")
+#for layer in model.layers:
+ #       if hasattr(layer, 'get_weights'):
+  #          print(f"  Weights and parameters: {layer.get_weights()}")
 #####
 #output: einfach suuuuper viele Zahlen, gar nicht übersichtlich :( 
 #####
 
+from tfkan.symbolic import symbolic_function_extraction
+
+symbolic_function = symbolic_function_extraction(model)
+print(f"Symbolic function: {symbolic_function}")
 
 
 
