@@ -49,26 +49,28 @@ for layer in model.layers:
 ######
 
 
-#check for custom layers or spline-related components
+
 for layer in model.layers:
         if hasattr(layer, 'get_weights'):
             print(f"  Weights and parameters: {layer.get_weights()}")
+#####
+#output: einfach suuuuper viele Zahlen, gar nicht übersichtlich :( 
+#####
 
 
 
 
-
-
+#funktioniert nicht:
 #model.plot()
-#model.symbolic_formula()[0][0]
 
+#funktioniert nicht:
+#model.symbolic_formula()[0][0]
+#funktioniert nicht:
 #print(model.plot())
+#funktioniert nicht:
 #print(model.symbolic_formula()[0][0])
 
 
 
 
-# with a Sequential model
-#get_3rd_layer_output = K.function([model.layers[0].input],
- #                                 [model.layers[1].output])
-#layer_output = get_3rd_layer_output([1])[0]
+
