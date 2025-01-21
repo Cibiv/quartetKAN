@@ -103,7 +103,7 @@ plot_model(model, to_file='../results/model.png', show_layer_activations=True, s
 #import sympy as sp
 import tf2onnx
 import onnx
-import onnx2pytorch import ConvertModel
+from onnx2pytorch import ConvertModel
 
 ibbx_model, _ = t2onnx.convert.from_keras(model)
 pytorch_model = ConvertModel(onnx_model)
