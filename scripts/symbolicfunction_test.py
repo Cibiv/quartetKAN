@@ -4,6 +4,7 @@ import tensorflow.keras as keras
 from keras import backend as K
 import tensorflow as tf
 
+
 import argparse
 import logging
 import os
@@ -99,7 +100,14 @@ plot_model(model, to_file='../results/model.png', show_layer_activations=True, s
 
 ########################
 
-import sympy as sp
+#import sympy as sp
+import tf2onnx
+import onnx
+import onnx2pytorch import ConvertModel
+
+ibbx_model, _ = t2onnx.convert.from_keras(model)
+pytorch_model = ConvertModel(onnx_model)
+pytorch_model
 
 
 
