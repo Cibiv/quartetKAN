@@ -84,7 +84,9 @@ from tensorflow.keras.utils import plot_model
 #hier gibt es mehr infos was man alles anzeigen lassen kann 
 ####
 
-plot_model(model, to_file='../results/model.png', show_layer_activations=True, show_trainable=True, show_shapes=True, show_dtype=True, show_layer_names=True, expand_nested=True)
+######funktioniert:
+#plot_model(model, to_file='../results/model.png', show_layer_activations=True, show_trainable=True, show_shapes=True, show_dtype=True, show_layer_names=True, expand_nested=True)
+#############
 #show_layer_activations=False,
  #   show_trainable=False,
 
@@ -105,7 +107,7 @@ import tf2onnx
 import onnx
 from onnx2pytorch import ConvertModel
 
-ibbx_model, _ = t2onnx.convert.from_keras(model)
+onnx_model, _ = tf2onnx.convert.from_keras(model)
 pytorch_model = ConvertModel(onnx_model)
 pytorch_model
 
