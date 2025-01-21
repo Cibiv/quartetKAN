@@ -107,7 +107,9 @@ import tf2onnx
 import onnx
 from onnx2pytorch import ConvertModel
 
-onnx_model, _ = tf2onnx.convert.from_keras(model)
+#onnx_model, _ = tf2onnx.convert.from_keras(model)
+
+onnx_model = onnx.load(../results/model1.onnx)
 pytorch_model = ConvertModel(onnx_model)
 pytorch_model
 
