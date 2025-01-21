@@ -109,6 +109,13 @@ ibbx_model, _ = t2onnx.convert.from_keras(model)
 pytorch_model = ConvertModel(onnx_model)
 pytorch_model
 
+#from kan import * 
+#model.plot(beta=100)
+#model.plot()
+#model = model.prune()
+#model.plot(mask=True)
+#model.symbolic_formula()[0][0]
+
 
 
 #funktioniert nicht:
