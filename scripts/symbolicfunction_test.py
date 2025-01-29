@@ -30,13 +30,13 @@ from pylab import *
 
 #modell laden:
 model = keras.saving.load_model('../models/F-zoneNN_20250116_140646_020-0.819-0.820')
-#anschauen was es für layer gibt: [15,4,2,1],index: 0,1,2,3 also 4 und 2 sind DenseKAN und 1 15 und 1 sind normal
+#anschauen was es für layer gibt: [15,4,2,1],index: 0 -> 4,1 -> 2,2->1 also 4 und 2 sind DenseKAN und 1 ist normal, 15 ist die Größe vom input
 model.summary()
 #auf den i-ten layer des models mit models.layers[i] zugreifen
 model.layers[0]
 model.layers[1]
 model.layers[2]
-model.layers[3]
+
 
 
 
