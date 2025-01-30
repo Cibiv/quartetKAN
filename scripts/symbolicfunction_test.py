@@ -41,8 +41,16 @@ model.summary()
 #<keras.src.layers.core.dense.Dense object at 0x7f8efa202f50>
 
 #für dense layers erhält man die weights mit model.layers[i].weights
-print(model.layers[2].weights)
+#print(model.layers[2].weights)
+#[<tf.Variable 'dense/kernel:0' shape=(2, 1) dtype=float32, numpy=
+#array([[ 2.5388613e+00],
+ #      [-1.0384964e-03]], dtype=float32)>, <tf.Variable 'dense/bias:0' shape=(1,) dtype=float32, numpy=array([-0.52242494], dtype=float32)>]
+#in meiner letzten laydr werden also die zwei nodes, die von der zweiten hidden layer übergeben werden mit 2.5 und -1.0 multipliziert, 
+#dann -0.5224 dazuaddiert und dann durch die sigmoid funktion gegeben für den output
 
+#wie erhalte ich die weights und aktivierungsfunktionen von den hidden layers?
+#inspiration bei pykan für die symbolic function
+print(model.layers[1].weights)
 
 
 
