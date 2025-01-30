@@ -33,9 +33,15 @@ model = keras.saving.load_model('../models/F-zoneNN_20250116_140646_020-0.819-0.
 #anschauen was es für layer gibt: [15,4,2,1],index: 0 -> 4,1 -> 2,2->1 also 4 und 2 sind DenseKAN und 1 ist normal, 15 ist die Größe vom input
 model.summary()
 #auf den i-ten layer des models mit models.layers[i] zugreifen
-print(model.layers[0])
-print(model.layers[1])
-print(model.layers[2])
+#print(model.layers[0])
+#<keras.src.saving.legacy.saved_model.load.DenseKAN object at 0x7f8efa866350>
+#print(model.layers[1])
+#<keras.src.saving.legacy.saved_model.load.DenseKAN object at 0x7f8efa7dfd10>
+#print(model.layers[2])
+#<keras.src.layers.core.dense.Dense object at 0x7f8efa202f50>
+
+#für dense layers erhält man die weights mit model.layers[i].weights
+print(model.layers[2].weights)
 
 
 
