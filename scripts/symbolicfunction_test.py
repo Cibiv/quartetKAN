@@ -29,9 +29,9 @@ from pylab import *
 #model.summary()
 
 #modell laden:
-model = keras.saving.load_model('../models/F-zoneNN_20250116_140646_020-0.819-0.820')
+#model = keras.saving.load_model('../models/F-zoneNN_20250116_140646_020-0.819-0.820')
 #anschauen was es für layer gibt: [15,4,2,1],index: 0 -> 4,1 -> 2,2->1 also 4 und 2 sind DenseKAN und 1 ist normal, 15 ist die Größe vom input
-model.summary()
+#model.summary()
 #auf den i-ten layer des models mit models.layers[i] zugreifen
 #print(model.layers[0])
 #<keras.src.saving.legacy.saved_model.load.DenseKAN object at 0x7f8efa866350>
@@ -715,5 +715,11 @@ array([[-2.2       , -1.8000001 , -1.4000001 , -1.        , -0.6       ,
         -0.20000005,  0.20000005,  0.5999999 ,  1.        ,  1.4000001 ,
          1.8       ,  2.2       ]], dtype=float32)>]
 """
+
+model = keras.saving.load_model('../models/F-zoneNN_20250115_180252_020-0.685-0.686')
+model.summary()
+#[15,3,1] -> index 0 ist hidden layer mit 3 nodes und index 1 ist dense layer für output 
+print(model.layers[0].weights)
+#print(model.layers[1].weights)
 
 
