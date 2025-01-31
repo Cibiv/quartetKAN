@@ -919,6 +919,9 @@ array([[-2.2       , -1.8000001 , -1.4000001 , -1.        , -0.6       ,
         -0.20000005,  0.20000005,  0.5999999 ,  1.        ,  1.4000001 ,
          1.8       ,  2.2       ]], dtype=float32)>]
 '''
-print(model.layers[1].weights)
-
-
+#print(model.layers[1].weights)
+"""[<tf.Variable 'dense/kernel:0' shape=(3, 1) dtype=float32, numpy=
+array([[ 6.165411],
+       [-8.190284],
+       [ 6.933253]], dtype=float32)>, <tf.Variable 'dense/bias:0' shape=(1,) dtype=float32, numpy=array([-0.00843432], dtype=float32)>]
+"""
