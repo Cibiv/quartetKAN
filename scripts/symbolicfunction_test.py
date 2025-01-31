@@ -924,4 +924,7 @@ array([[-2.2       , -1.8000001 , -1.4000001 , -1.        , -0.6       ,
 array([[ 6.165411],
        [-8.190284],
        [ 6.933253]], dtype=float32)>, <tf.Variable 'dense/bias:0' shape=(1,) dtype=float32, numpy=array([-0.00843432], dtype=float32)>]
+
+       in meiner letzten layer werden also die drei nodes, die von der hidden layer übergeben werden mit 6.165, -8.19 und 6.93 multipliziert, 
+#dann -0.008 dazuaddiert und dann durch die sigmoid funktion gegeben für den output
 """
