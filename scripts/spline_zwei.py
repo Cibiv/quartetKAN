@@ -1,7 +1,7 @@
 import tensorflow as tf
 
 
-def calc_spline_values(x: tf.Tensor, grid: tf.Tensor, spline_order: int):
+def calc_spline_values_zwei(x: tf.Tensor, grid: tf.Tensor, spline_order: int):
     """
     Calculate B-spline values for the input tensor.
 
