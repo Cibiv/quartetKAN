@@ -1,7 +1,7 @@
-layers: [15, 50, 1]
-learning_rate: 0.0002
+layers: [15, 1, 1]
+learning_rate: 0.0001
 batch_size: 32
-epochs: 20
+epochs: 3
 no_epochs_dataset: 10
 perc_eval: 0.1
 multiple_data: False
