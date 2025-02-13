@@ -55,15 +55,16 @@ scaled_input = freq_vector * scale_factor.T
 #2) Anwendung der Splines
 spline_output = np.zeros((15, 1))  #Output-Speicher für 15 Features
 
-i = int(1)
+#i = int(1)
 #for i in range(15):
-    spline = CubicSpline(spline_grid[:8], spline_kernel[i, :, 0])  # spline funktionen erzeugen
+    spline = CubicSpline(spline_grid[:8], spline_kernel[1, :, 0])  # spline funktionen erzeugen
     #spline = CubicSpline(spline_grid, spline_kernel[i, :, 0])
     #spline = CubicSpline(spline_grid[:12], spline_kernel[i, :, 0])  # spline funktionen erzeugen
-    spline_output[i] = spline(scaled_input[0, i])  #Spline auf den skalierten Wert anwenden
+    spline_output[1] = spline(scaled_input[0, 1])  #Spline auf den skalierten Wert anwenden
 
 # 3) Summieren der Ergebnisse und Bias hinzufügen
-output = np.sum(spline_output) + bias
+#output = np.sum(spline_output) + bias
+output = spline_output[1]+bias
 
 print("Model Output:", output)
 
