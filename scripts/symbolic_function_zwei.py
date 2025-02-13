@@ -64,5 +64,5 @@ print(scaled_input)
 #output = np.sum(spline_output) + bias
 #output = spline_output[1]+bias
 
-print("Model Output:", output)
+#print("Model Output:", output)
 
