@@ -21,12 +21,15 @@ model = keras.saving.load_model('../models/F-zoneNN_20250212_072800_003-0.667-0.
 #<keras.src.saving.legacy.saved_model.load.DenseKAN object at 0x7f4d8748d850>
 
 #output layer:
-print(model.layers[1])
+#print(model.layers[1])
+#<keras.src.layers.core.dense.Dense object at 0x7fdf76b06390>
 
 #für dense layers erhält man die weights mit model.layers[i].weights
-print(model.layers[1].weights)
-
-
+#print(model.layers[1].weights)
+'''
+[<tf.Variable 'dense/kernel:0' shape=(1, 1) dtype=float32, numpy=array([[11.785503]], dtype=float32)>,
+<tf.Variable 'dense/bias:0' shape=(1,) dtype=float32, numpy=array([0.03887552], dtype=float32)>]
+'''
 #wie erhalte ich die weights und aktivierungsfunktionen von den hidden layers?
 #print(model.layers[0].weights)
 
