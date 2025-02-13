@@ -36,6 +36,12 @@ spline_grid = np.array([-2.2, -1.8000001, -1.4000001, -1.0, -0.6,
                         -0.20000005, 0.20000005, 0.5999999, 1.0, 
                         1.4000001, 1.8, 2.2])
 
+print(f"spline_grid[:12]: {spline_grid[:12]}")
+print(f"Anzahl der Punkte in spline_grid[:12]: {len(spline_grid[:12])}")
+
+print(f"spline_kernel[{i}, :, 0]: {spline_kernel[i, :, 0]}")
+print(f"Anzahl der Punkte in spline_kernel[{i}, :, 0]: {len(spline_kernel[i, :, 0])}")
+'''
 #1) Skalierung der Eingabe
 scaled_input = freq_vector * scale_factor.T
 
@@ -52,3 +58,4 @@ for i in range(15):
 output = np.sum(spline_output) + bias
 
 print("Model Output:", output)
+'''
