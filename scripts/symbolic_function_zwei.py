@@ -55,7 +55,8 @@ scaled_input = freq_vector * scale_factor.T
 #2) Anwendung der Splines
 spline_output = np.zeros((15, 1))  #Output-Speicher für 15 Features
 
-for i in range(15):
+i = int(1)
+#for i in range(15):
     spline = CubicSpline(spline_grid[:8], spline_kernel[i, :, 0])  # spline funktionen erzeugen
     #spline = CubicSpline(spline_grid, spline_kernel[i, :, 0])
     #spline = CubicSpline(spline_grid[:12], spline_kernel[i, :, 0])  # spline funktionen erzeugen
