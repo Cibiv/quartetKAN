@@ -50,6 +50,12 @@ spline_grid = np.array([-2.2, -1.8000001, -1.4000001, -1.0, -0.6,
 scaled_input = freq_vector * scale_factor.T
 print(scaled_input)
 
+'''
+[[ 0.0411432  0.037582   0.1758915  0.0461358 -0.0471355 -0.07038
+  -0.2098314 -0.12574    0.045718   0.2131846  0.0936522  0.0842368
+   0.606119  -0.109174  -0.1425015]]
+'''
+
 #2) Anwendung der Splines
 #spline_output = np.zeros((15, 1))  #Output-Speicher für 15 Features
 
