@@ -32,14 +32,11 @@ scale_factor = np.array([
 bias = np.array([0.0403])
 
 #Spline-Grid
-'''
+
 spline_grid = np.array([-2.2, -1.8000001, -1.4000001, -1.0, -0.6, 
                         -0.20000005, 0.20000005, 0.5999999, 1.0, 
                         1.4000001, 1.8, 2.2])
-                        '''
-spline_grid = np.array([-2.2, -1.8000001, -1.4000001, 
-                        -0.20000005, 0.20000005, 0.5999999, 1.0, 
-                        2.2])
+                        
 
 #print(f"spline_grid[:12]: {spline_grid[:12]}")
 #print(f"Anzahl der Punkte in spline_grid[:12]: {len(spline_grid[:12])}")
@@ -57,7 +54,7 @@ spline_output = np.zeros((15, 1))  #Output-Speicher für 15 Features
 
 #i = int(1)
 #for i in range(15):
-spline = CubicSpline(spline_grid[:8], spline_kernel[1, :, 0])  # spline funktionen erzeugen
+spline = CubicSpline(spline_grid[:12], spline_kernel[1, :12, 0])  # spline funktionen erzeugen
     #spline = CubicSpline(spline_grid, spline_kernel[i, :, 0])
     #spline = CubicSpline(spline_grid[:12], spline_kernel[i, :, 0])  # spline funktionen erzeugen
 spline_output[1] = spline(scaled_input[0, 1])  #Spline auf den skalierten Wert anwenden
