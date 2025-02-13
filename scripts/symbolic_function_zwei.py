@@ -46,8 +46,8 @@ print(f"Anzahl der Punkte in spline_grid[:12]: {len(spline_grid[:12])}")
 
 spline = CubicSpline(spline_grid[:12], spline_kernel[i, :12, 0])
 
-print(f"spline_kernel[{i}, :, 0]: {spline_kernel[i, :, 0]}")
-print(f"Anzahl der Punkte in spline_kernel[{i}, :, 0]: {len(spline_kernel[i, :, 0])}")
+#print(f"spline_kernel[{i}, :, 0]: {spline_kernel[i, :, 0]}")
+#print(f"Anzahl der Punkte in spline_kernel[{i}, :, 0]: {len(spline_kernel[i, :, 0])}")
 
 #1) Skalierung der Eingabe
 scaled_input = freq_vector * scale_factor.T
