@@ -78,17 +78,18 @@ print("Model hidden layer Output:", output)
 
 
 ######anwenden der output layer: 
-'''
+
 def sigmoid(x):
     return 1 / (1 + np.exp(-x))
 '''
 def sigmoid(x):
   return 1 / (1 + math.exp(-x))
-
+'''
 #4) Multiplikation, Addition von bias und Sigmoid-Funktion anwenden
 final_output = sigmoid(output * 11.785503 + 0.03887552)
 
 print("final alle layer Output:", final_output)
+#math sigmoid: final alle layer Output: 1.1531150924594043e-16
 #np sigmoid: [1.15311509e-16]
 ################
 
