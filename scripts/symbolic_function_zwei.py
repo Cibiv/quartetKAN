@@ -60,9 +60,13 @@ print(scaled_input)
 spline_output = np.zeros((15, 1))  #Output-Speicher für 15 Features
 
 for i in range(15):
+    poly = Polynomial(spline_kernel[i][:, 0])  #shape (15, 8, 1) -> Umwandlung auf (8,)
+    spline_output[i] = poly(scaled_input[0, i])
+'''
+for i in range(15):
     poly = Polynomial(spline_kernel[i])  #Polynom 7. Grades erzeugen
     spline_output[i] = poly(scaled_input[0, i])  #Polynom auf den jeweiligen (also ersten auf ersten usw) skalierten Wert anwenden
-
+'''
 # 3) Summieren der Ergebnisse und Bias hinzufügen
 output = np.sum(spline_output) + bias
 
