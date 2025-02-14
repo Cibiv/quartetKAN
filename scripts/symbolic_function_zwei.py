@@ -145,20 +145,23 @@ output = np.sum(scaled_output) + bias
 #Model Output: 1.159650784952479e-07
 
 '''
+
+
 ######
-#Polynome reihenfolge umdrehen
-######
+#nur betrag bei einträgen im scale faktor? (das macht eig keinen sinn?)
+#####
+#Beträge der Einträge
+absolute_scale_factor = np.abs(scale_factor)
 
 # 1) Anwendung der Polynome
 spline_output = np.zeros((15, 1))  #Output-Speicher für 15 Features
 
 for i in range(15):
-    poly = Polynomial(spline_kernel[15-i][:, 0])  
-    #poly = Polynomial(spline_kernel[i][::-1])  #Koeffizienten umkehren
+    poly = Polynomial(spline_kernel[i][:, 0])  
     spline_output[i] = poly(freq_vector[0, i])  #Polynom anwenden
 
 # 2) Skalierung der Ergebnisse
-scaled_output = spline_output * scale_factor
+scaled_output = spline_output * absolute_scale_factor
 
 # 3) Summieren der Ergebnisse und Bias hinzufügen
 output = np.sum(scaled_output) + bias
@@ -167,11 +170,8 @@ output = np.sum(scaled_output) + bias
 print("pre sigmoid:")
 print(output * 11.785503 + 0.03887552)
 
-
 # 4) Multiplikation, Addition und Sigmoid-Funktion anwenden
-final_output = sigmoid(output * 11.785503 + 0.03887552)
+#final_output = sigmoid(output * 11.785503 + 0.03887552)
 
-print("Model Output:", final_output)
-
-
+#print("Model Output:", final_output)
 
