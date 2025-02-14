@@ -48,7 +48,8 @@ spline_grid = np.array([-2.2, -1.8000001, -1.4000001, -1.0, -0.6,
 
 #print(f"spline_kernel[{i}, :, 0]: {spline_kernel[i, :, 0]}")
 #print(f"Anzahl der Punkte in spline_kernel[{i}, :, 0]: {len(spline_kernel[i, :, 0])}")
-
+#erst skalieren dann polynome:
+'''
 #1) Skalierung der Eingabe
 scaled_input = freq_vector * scale_factor.T
 print(scaled_input)
@@ -65,9 +66,11 @@ for i in range(15):
     poly = Polynomial(spline_kernel[i][:, 0])  #shape (15, 8, 1) -> Umwandlung auf (8,)
     spline_output[i] = poly(scaled_input[0, i])
 '''
+'''
 for i in range(15):
     poly = Polynomial(spline_kernel[i])  #Polynom 7. Grades erzeugen
     spline_output[i] = poly(scaled_input[0, i])  #Polynom auf den jeweiligen (also ersten auf ersten usw) skalierten Wert anwenden
+'''
 '''
 # 3) Summieren der Ergebnisse und Bias hinzufügen
 output = np.sum(spline_output) + bias
@@ -108,4 +111,26 @@ print("final alle layer Output:", final_output)
 #output = spline_output[1]+bias
 
 #print("Model Output:", output)
+'''
+
+########
+########
+#Erst polynome dann skalieren:
+# 1) Anwendung der Polynome
+spline_output = np.zeros((15, 1))  #Output-Speicher für 15 Features
+
+for i in range(15):
+    poly = Polynomial(spline_kernel[i][:, 0])  
+    spline_output[i] = poly(freq_vector[0, i])  #Polynom anwenden
+
+# 2) Skalierung der Ergebnisse
+scaled_output = spline_output * scale_factor
+
+# 3) Summieren der Ergebnisse und Bias hinzufügen
+output = np.sum(scaled_output) + bias
+
+# 4) Multiplikation, Addition und Sigmoid-Funktion anwenden
+final_output = sigmoid(output * 11.785503 + 0.03887552)
+
+print("Model Output:", final_output)
 
