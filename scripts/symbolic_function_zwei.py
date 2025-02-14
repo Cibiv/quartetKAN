@@ -131,8 +131,13 @@ scaled_output = spline_output * scale_factor
 # 3) Summieren der Ergebnisse und Bias hinzufügen
 output = np.sum(scaled_output) + bias
 
-# 4) Multiplikation, Addition und Sigmoid-Funktion anwenden
-final_output = sigmoid(output * 11.785503 + 0.03887552)
+#ausdrucken lassen VOR sigmoid: 
+print(pre sigmoid:)
+print(output * 11.785503 + 0.03887552)
 
-print("Model Output:", final_output)
+# 4) Multiplikation, Addition und Sigmoid-Funktion anwenden
+#final_output = sigmoid(output * 11.785503 + 0.03887552)
+
+#print("Model Output:", final_output)
+#Model Output: 1.159650784952479e-07
 
