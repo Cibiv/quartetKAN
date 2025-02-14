@@ -136,7 +136,6 @@ output = np.sum(scaled_output) + bias
 #print("pre sigmoid:")
 #print(output * 11.785503 + 0.03887552)
 #[-15.96997662]
-#händisch in sigmoid ergibt 0.999999 immernoch falsch aber immerhin etwas besser 
 
 # 4) Multiplikation, Addition und Sigmoid-Funktion anwenden
 #final_output = sigmoid(output * 11.785503 + 0.03887552)
@@ -146,7 +145,7 @@ output = np.sum(scaled_output) + bias
 
 '''
 
-
+'''
 ######
 #nur betrag bei einträgen im scale faktor? (das macht eig keinen sinn?)
 #####
@@ -176,6 +175,7 @@ output = np.sum(scaled_output) + bias
 final_output = sigmoid(output * 11.785503 + 0.03887552)
 
 print("Model Output:", final_output)
-
+#Model Output: 8.093367555499568e-14
+'''
 
 
