@@ -69,7 +69,7 @@ for i in range(15):
 '''
 # 3) Summieren der Ergebnisse und Bias hinzufügen
 output = np.sum(spline_output) + bias
-
+print("Output von dem ersten polynom:", spline_output[0])
 print("Model hidden layer Output:", output)
 ################
 
