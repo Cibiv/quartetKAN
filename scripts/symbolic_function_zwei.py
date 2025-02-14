@@ -55,7 +55,7 @@ print(scaled_input)
   -0.2098314 -0.12574    0.045718   0.2131846  0.0936522  0.0842368
    0.606119  -0.109174  -0.1425015]]
 '''
-2)Anwendung der Splines als Polynome
+#2)Anwendung der Splines als Polynome
 spline_output = np.zeros((15, 1))  #Output-Speicher für 15 Features
 
 for i in range(15):
