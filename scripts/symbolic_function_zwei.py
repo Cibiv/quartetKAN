@@ -153,7 +153,8 @@ output = np.sum(scaled_output) + bias
 spline_output = np.zeros((15, 1))  #Output-Speicher für 15 Features
 
 for i in range(15):
-    poly = Polynomial(spline_kernel[i][::-1])  #Koeffizienten umkehren
+    poly = Polynomial(spline_kernel[15-i][:, 0])  
+    #poly = Polynomial(spline_kernel[i][::-1])  #Koeffizienten umkehren
     spline_output[i] = poly(freq_vector[0, i])  #Polynom anwenden
 
 # 2) Skalierung der Ergebnisse
