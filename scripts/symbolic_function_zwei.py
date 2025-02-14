@@ -117,6 +117,7 @@ print("final alle layer Output:", final_output)
 
 ########
 ########
+'''
 #Erst polynome dann skalieren:
 # 1) Anwendung der Polynome
 spline_output = np.zeros((15, 1))  #Output-Speicher für 15 Features
@@ -132,12 +133,44 @@ scaled_output = spline_output * scale_factor
 output = np.sum(scaled_output) + bias
 
 #ausdrucken lassen VOR sigmoid: 
-print("pre sigmoid:")
-print(output * 11.785503 + 0.03887552)
+#print("pre sigmoid:")
+#print(output * 11.785503 + 0.03887552)
+#[-15.96997662]
+#händisch in sigmoid ergibt 0.999999 immernoch falsch aber immerhin etwas besser 
 
 # 4) Multiplikation, Addition und Sigmoid-Funktion anwenden
 #final_output = sigmoid(output * 11.785503 + 0.03887552)
 
 #print("Model Output:", final_output)
 #Model Output: 1.159650784952479e-07
+
+'''
+######
+Polynome reihenfolge umdrehen
+######
+
+# 1) Anwendung der Polynome
+spline_output = np.zeros((15, 1))  #Output-Speicher für 15 Features
+
+for i in range(15):
+    poly = Polynomial(spline_kernel[i][::-1])  #Koeffizienten umkehren
+    spline_output[i] = poly(freq_vector[0, i])  #Polynom anwenden
+
+# 2) Skalierung der Ergebnisse
+scaled_output = spline_output * scale_factor
+
+# 3) Summieren der Ergebnisse und Bias hinzufügen
+output = np.sum(scaled_output) + bias
+
+#ausdrucken lassen VOR sigmoid: 
+print("pre sigmoid:")
+print(output * 11.785503 + 0.03887552)
+
+
+# 4) Multiplikation, Addition und Sigmoid-Funktion anwenden
+final_output = sigmoid(output * 11.785503 + 0.03887552)
+
+print("Model Output:", final_output)
+
+
 
