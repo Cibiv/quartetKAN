@@ -70,7 +70,17 @@ for i in range(15):
 # 3) Summieren der Ergebnisse und Bias hinzufügen
 output = np.sum(spline_output) + bias
 print("Output von dem ersten polynom:", spline_output[0])
+#Output von dem ersten polynom: [-2.691]
 print("Model hidden layer Output:", output)
+#Model hidden layer Output: [-3.1172]
+
+
+######anwenden der output layer: 
+
+#4) Multiplikation, Addition von bias und Sigmoid-Funktion anwenden
+final_output = sigmoid(output * 11.785503 + 0.03887552)
+
+print("Model Output:", final_output)
 ################
 
 #2) Anwendung der Splines
