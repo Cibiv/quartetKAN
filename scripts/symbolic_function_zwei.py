@@ -1,6 +1,8 @@
 import numpy as np
 from scipy.interpolate import CubicSpline
 from numpy.polynomial.polynomial import Polynomial
+import math
+
 
 #Beispiel-Frequenzvektor 
 freq_vector = np.array([[0.079, 0.019, 0.135, 0.019, 0.031, 0.04, 0.129, 0.04, 
@@ -76,14 +78,18 @@ print("Model hidden layer Output:", output)
 
 
 ######anwenden der output layer: 
-
+'''
 def sigmoid(x):
     return 1 / (1 + np.exp(-x))
+'''
+def sigmoid(x):
+  return 1 / (1 + math.exp(-x))
 
 #4) Multiplikation, Addition von bias und Sigmoid-Funktion anwenden
 final_output = sigmoid(output * 11.785503 + 0.03887552)
 
-print("Model Output:", final_output)
+print("final alle layer Output:", final_output)
+#np sigmoid: [1.15311509e-16]
 ################
 
 #2) Anwendung der Splines
