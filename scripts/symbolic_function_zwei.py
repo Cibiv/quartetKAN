@@ -146,7 +146,7 @@ output = np.sum(scaled_output) + bias
 
 '''
 ######
-Polynome reihenfolge umdrehen
+#Polynome reihenfolge umdrehen
 ######
 
 # 1) Anwendung der Polynome
