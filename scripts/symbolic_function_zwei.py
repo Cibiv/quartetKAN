@@ -167,11 +167,15 @@ scaled_output = spline_output * absolute_scale_factor
 output = np.sum(scaled_output) + bias
 
 #ausdrucken lassen VOR sigmoid: 
-print("pre sigmoid:")
-print(output * 11.785503 + 0.03887552)
+#print("pre sigmoid:")
+#print(output * 11.785503 + 0.03887552)
+#[-30.1451464]
+#in sigmoid ergibt das 8.093367*10^-14 also auch nicht 
 
 # 4) Multiplikation, Addition und Sigmoid-Funktion anwenden
-#final_output = sigmoid(output * 11.785503 + 0.03887552)
+final_output = sigmoid(output * 11.785503 + 0.03887552)
 
-#print("Model Output:", final_output)
+print("Model Output:", final_output)
+
+
 
