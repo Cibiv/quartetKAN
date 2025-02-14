@@ -1,5 +1,6 @@
 import numpy as np
 from scipy.interpolate import CubicSpline
+from numpy.polynomial.polynomial import Polynomial
 
 #Beispiel-Frequenzvektor 
 freq_vector = np.array([[0.079, 0.019, 0.135, 0.019, 0.031, 0.04, 0.129, 0.04, 
