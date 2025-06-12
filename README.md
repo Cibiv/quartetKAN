@@ -2,7 +2,7 @@
 
 ## Prerequisites
 
-For all scripts Python x.x was used. The python packages used can be installed via
+For all scripts Python 3.11.9 was used. The python packages used can be installed via
 ```sh
 conda env create -f required_packages.yml
 ```
