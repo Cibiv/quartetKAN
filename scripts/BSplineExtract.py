@@ -51,5 +51,9 @@ print(model.layers[0])
 print("layer 1:\n")
 print(model.layers[1])
 
+#erste hidden layer weights: 
+print("layer 0 weights:\n")
+print(model.layers[0].weights)
+
 #für dense layers erhält man die weights mit model.layers[i].weights
 #print(model.layers[1].weights)
