@@ -16,7 +16,7 @@ args = vars(parser.parse_args())
 #Modell laden
 model = keras.saving.load_model(args['model'])
 model.summary()
-
+'''
 #Testdatei auswählen
 test_files = [f for f in os.listdir(args["test"]) if f.endswith('.csv')]
 if not test_files:
@@ -39,17 +39,17 @@ output = model.predict(feature_vector)
 #ergebnis 
 print("Beispiel-Frequenzvektor:", feature_vector)
 print("Model Output:", output)
-
+'''
 #anschauen was es für layer gibt: 
 #model.summary()
 #auf den i-ten layer des models mit models.layers[i] zugreifen
 #hidden layer:
-#print(model.layers[0])
-#<keras.src.saving.legacy.saved_model.load.DenseKAN object at 0x7f4d8748d850>
+print("layer 0:\n")
+print(model.layers[0])
 
-#output layer:
-#print(model.layers[1])
-#<keras.src.layers.core.dense.Dense object at 0x7fdf76b06390>
+#zweite hidden layer? layer:
+print("layer 1:\n")
+print(model.layers[1])
 
 #für dense layers erhält man die weights mit model.layers[i].weights
 #print(model.layers[1].weights)
