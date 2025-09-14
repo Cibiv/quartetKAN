@@ -230,7 +230,7 @@ class KAN:
         # use activation, transfer function
         activation = self.get_activation()
         transfer = self.get_transfer()
-      #########################
+      
         self.model = tf.keras.models.Sequential()
         #input layer:
         self.model.add(Input(shape = (self.layers[0],)))
@@ -240,21 +240,8 @@ class KAN:
             #self.model.add(Dropout(self.dropout))
         #output layer wieder mit acitvation weil die normal ist und wir eine wkeit als output wollen 
         self.model.add(Dense(self.layers[-1], activation = activation, use_bias = self.use_bias, kernel_initializer = w_init, bias_initializer = b_init))
-      ##########################  
-        # build sequential architecture
-     #   self.model = keras.Sequential()
-
-        # set input layer with as many nodes as first value in layer list (should be = #features)
-     #   self.model.add(Input(shape = (self.layers[0],)))
-
-        # add interim layers with transfer function as activation and dropout
-     #   for l in range(1, len(self.layers) - 1):
-     #       self.model.add(Dense(self.layers[l], activation = transfer, use_bias = self.use_bias, kernel_initializer = w_init, bias_initializer = b_init))
-     #       self.model.add(Dropout(self.dropout))
-
-        # add output layer with activation
-     #   self.model.add(Dense(self.layers[-1], activation = activation, use_bias = self.use_bias, kernel_initializer = w_init, bias_initializer = b_init))
-    
+      
+        
 
     # initialize parameters
     def init_params(self):
@@ -336,3 +323,4 @@ if __name__ == '__main__':
     except IndexError as e:
         logging.error("Please specify a path to a config file as first commandline argument")
         exit(1)
+
