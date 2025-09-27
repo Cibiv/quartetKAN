@@ -238,7 +238,7 @@ class KAN:
         for l in range(1, len(self.layers) - 1):
             self.model.add(DenseKAN(self.layers[l]))
             #self.model.add(Dropout(self.dropout))
-        #output layer wieder mit acitvation weil die normal ist und wir eine wkeit als output wollen 
+        #output layer wieder mit activation weil die normal ist und wir eine wkeit als output wollen 
         self.model.add(Dense(self.layers[-1], activation = activation, use_bias = self.use_bias, kernel_initializer = w_init, bias_initializer = b_init))
       
         
@@ -323,4 +323,5 @@ if __name__ == '__main__':
     except IndexError as e:
         logging.error("Please specify a path to a config file as first commandline argument")
         exit(1)
+
 
