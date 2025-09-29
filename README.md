@@ -30,7 +30,7 @@ Running
 ```sh
 python3 train.py <config>
 ```
-a network is trained using the hyperparameters defined in the config-file (see e.g. config/config_F-zoneNN.yaml). The trained models are saved within the models folder.
+a network is trained using the hyperparameters defined in the config-file (see e.g. config/config_KAN.yaml). The trained models are saved within the models folder.
 
 An already trained network can be tested by executing:
 ```sh
